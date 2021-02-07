@@ -20,27 +20,39 @@
                      <!-- 改欄位 -->
                     <form name="form1" novalidate onsubmit="checkForm(); return false;">
                         <div class="form-group">
-                            <label for="bid_product_number">** bid_product_number</label>
-                            <input type="text" class="form-control" id="bid_product_number" name="bid_product_number"
-                                   value="<%= bid_product_number %>">
+                            <label for="product_name">** product_name</label>
+                            <input type="text" class="form-control" id="product_name" name="product_name"
+                                   value="<%= product_name %>">
                             <small class="form-text error-msg" style="display: none"></small>
                         </div>
                         <div class="form-group">
-                            <label for="bid_add_money">bid_add_money</label>
-                            <input type="text" class="form-control" id="bid_add_money" name="bid_add_money"
-                                   value="<%= bid_add_money %>"
+                            <label for="price">price</label>
+                            <input type="text" class="form-control" id="price" name="price"
+                                   value="<%= price %>"
                                 >
                         </div>
                         <div class="form-group">
-                            <label for="bid_sum_money">bid_sum_money</label>
-                            <input type="text" class="form-control" id="bid_sum_money" name="bid_sum_money"
-                                   value="<%= bid_sum_money %>">
+                            <label for="color">color</label>
+                            <input type="text" class="form-control" id="color" name="color"
+                                   value="<%= color %>">
                         </div>
 
                         <div class="form-group">
-                            <label for="bid_created_time">bid_created_time</label>
-                            <input type="date" class="form-control" id="bid_created_time" name="bid_created_time"
-                                   value="<%= bid_created_time %>">
+                            <label for="size">size</label>
+                            <input type="text" class="form-control" id="size" name="size"
+                                   value="<%= size %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="size">photo</label>
+                            <input type="text" class="form-control" id="photo" name="photo"
+                                   value="<%= photo %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="size">introduction</label>
+                            <input type="text" class="form-control" id="introduction" name="introduction"
+                                   value="<%= introduction %>">
                         </div>
 
                         <button type="submit" class="btn btn-primary">修改</button>
