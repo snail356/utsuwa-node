@@ -144,13 +144,19 @@ app.get('/try-db', async (req, res)=>{
     const [rows] = await db.query("SELECT * FROM `address_book` ORDER BY `sid` DESC LIMIT 6")
     res.json(rows);
 })
-
+// 老師範例
 app.use('/address-book', require(__dirname + '/routes/address-book'))
 
-// 張洛慈 bidding
+// 會員路由 欣穎
+app.use('/members', require(__dirname + '/routes/members'))
+// 商品路由 家寧
+app.use('/products', require(__dirname + '/routes/products'))
+// 課程路由 云晴
+app.use('/course', require(__dirname + '/routes/course'))
+// 競標路由 洛慈
 app.use('/bidding', require(__dirname + '/routes/bidding'))
-
-// 
+// 訂單路由 椲甯
+app.use('/orderdetails', require(__dirname + '/routes/orderdetails'))
 
 
 
