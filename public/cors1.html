@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="sendAjax()">send ajax</button>
+<div id="info"></div>
+
+<script>
+
+
+    function sendAjax(){
+        fetch('http://localhost:3000/try-moment')
+        .then(r=>r.text())
+        .then(txt=>{
+            info.innerHTML = txt;
+        })
+
+    }
+</script>
+</body>
+</html>
