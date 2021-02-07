@@ -15,35 +15,39 @@
 
             <div class="card" >
                 <div class="card-body">
-                    <h5 class="card-title">修改資料</h5>
+                    <h5 class="card-title">新增資料</h5>
 
-                     <!-- 改欄位 -->
+                    <!-- 改欄位 -->
                     <form name="form1" novalidate onsubmit="checkForm(); return false;">
+                        
                         <div class="form-group">
-                            <label for="bid_product_number">** bid_product_number</label>
-                            <input type="text" class="form-control" id="bid_product_number" name="bid_product_number"
-                                   value="<%= bid_product_number %>">
+                            <label for="product_name">** product_name</label>
+                            <input type="text" class="form-control" id="product_name" name="product_name" required>
                             <small class="form-text error-msg" style="display: none"></small>
                         </div>
                         <div class="form-group">
-                            <label for="bid_add_money">bid_add_money</label>
-                            <input type="text" class="form-control" id="bid_add_money" name="bid_add_money"
-                                   value="<%= bid_add_money %>"
-                                >
+                            <label for="price">** price</label>
+                            <input type="text" class="form-control" id="price" name="price">
+                            <small class="form-text error-msg" style="display: none"></small>
                         </div>
                         <div class="form-group">
-                            <label for="bid_sum_money">bid_sum_money</label>
-                            <input type="text" class="form-control" id="bid_sum_money" name="bid_sum_money"
-                                   value="<%= bid_sum_money %>">
+                            <label for="color">color</label>
+                            <input type="text" class="form-control" id="color" name="color">
                         </div>
-
                         <div class="form-group">
-                            <label for="bid_created_time">bid_created_time</label>
-                            <input type="date" class="form-control" id="bid_created_time" name="bid_created_time"
-                                   value="<%= bid_created_time %>">
+                            <label for="size">size</label>
+                            <input type="text" class="form-control" id="size" name="size">
+                        </div>
+                        <div class="form-group">
+                            <label for="photo">photo</label>
+                            <input type="text" class="form-control" id="photo" name="photo">
+                        </div>
+                        <div class="form-group">
+                            <label for="introduction">introduction</label>
+                            <input type="text" class="form-control" id="introduction" name="introduction">
                         </div>
 
-                        <button type="submit" class="btn btn-primary">修改</button>
+                        <button type="submit" class="btn btn-primary">新增</button>
                     </form>
                 </div>
             </div>
@@ -61,7 +65,7 @@
     const email_re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
     function checkForm(){
-        info.style.display = 'none';
+        // info.style.display = 'none';
         let isPass = true;
 
         // name.style.borderColor = '#CCCCCC';
@@ -90,13 +94,14 @@
                 .then(obj=>{
                     console.log(obj);
                     if(obj.success){
+                        // 新增成功
                         info.classList.remove('alert-danger');
                         info.classList.add('alert-success');
-                        info.innerHTML = '修改成功';
+                        info.innerHTML = '新增成功';
                     } else {
                         info.classList.remove('alert-success');
                         info.classList.add('alert-danger');
-                        info.innerHTML = obj.error || '資料沒有修改' ;
+                        info.innerHTML = obj.error || '新增失敗' ;
                     }
                     info.style.display = 'block';
                 });
