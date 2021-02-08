@@ -5,9 +5,9 @@ const router = express.Router();
 const db = require(__dirname + '/../modules/db_connect2');
 
 router.use((req, res, next)=>{
-    if(!req.session.admin){
-        return res.redirect('/');
-    }
+    // if(!req.session.admin){
+    //     return res.redirect('/');
+    // }
     res.locals.baseUrl = req.baseUrl;
     res.locals.url = req.url;
     next();
@@ -43,6 +43,14 @@ const listHandler = async (req)=>{
         page,
         rows,
     }
+};
+
+//我的寶貝sql
+const list = async (req)=>{
+   
+    let rows = [];
+    [rows] = await db.query("SELECT * FROM `product_winnie`");
+    return rows
 };
 
 // **********改資料表
@@ -117,6 +125,12 @@ router.get('/list', async (req, res)=>{
 router.get('/api/list', async (req, res)=>{
     const output = await listHandler(req);
     res.json(output);
+})
+
+//我的寶貝
+router.get('/json', async (req, res)=>{
+    const output = await list(req);
+    res.status(200).json(output);
 })
 
 // router.get('/', listHandler)
