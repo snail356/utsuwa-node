@@ -45,6 +45,14 @@ const listHandler = async (req)=>{
     }
 };
 
+//我的寶貝sql
+const list = async (req)=>{
+   
+    let rows = [];
+    [rows] = await db.query("SELECT * FROM `product_winnie`");
+    return rows
+};
+
 // **********改資料表
 // 修改
 router.get('/:sid/edit', async (req, res)=>{
@@ -117,6 +125,12 @@ router.get('/list', async (req, res)=>{
 router.get('/api/list', async (req, res)=>{
     const output = await listHandler(req);
     res.json(output);
+})
+
+//我的寶貝
+router.get('/json', async (req, res)=>{
+    const output = await list(req);
+    res.status(200).json(output);
 })
 
 // router.get('/', listHandler)
