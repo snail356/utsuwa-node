@@ -1,6 +1,8 @@
 <%- include('../parts/html-head') %>
     <%- include('../parts/navbar') %>
         <div class="container">
+           
+
             <div class="row mt-5">
                 <div class="col">
 
@@ -10,13 +12,11 @@
                                 <th scope="col">
                                     <i class="fas fa-minus-circle"></i>
                                 </th>
-                                <th scope="col">#</th>
-                                <th scope="col">product_name</th>
-                                <th scope="col">price</th>
-                                <th scope="col">color</th>
-                                <th scope="col">size</th>
-                                <th scope="col">photo</th>
-                                <th scope="col">introduction</th>
+                                <th scope="col">sid</th>
+                                <th scope="col">account</th>
+                                <th scope="col">email</th>
+                                <th scope="col">password</th>
+                                <th scope="col">created_at</th>
                                 <th scope="col">
                                     <i class="fas fa-edit"></i>
                                 </th>
@@ -31,24 +31,19 @@
                                         <%= i.sid %>
                                     </td>
                                     <td>
-                                        <%= i.product_name %>
+                                        <%= i.account %>
                                     </td>
                                     <td>
-                                        <%= i.price %>
+                                        <%= i.email %>
                                     </td>
                                     <td>
-                                        <%= i.color %>
+                                        <%= i.password %>
                                     </td>
+
                                     <td>
-                                        <%= i.size %>
+                                        <%= i.created_at %>
                                     </td>
-                                    <td>
-                                        <img src="http://localhost:3000/imgs/<%= JSON.parse(i.photo)[0] %>" style="height:auto;width:150px">
-                                    </td>
-                                    <td>
-                                        <%= i.introduction %>
-                                    </td>
-                                    <td><a href="/products/<%= i.sid %>/edit"><i class="fas fa-edit"></i></a></td>
+                                    <td><a href="/members/<%= i.sid %>/edit"><i class="fas fa-edit"></i></a></td>
                                 </tr>
                                 <% } %>
                         </tbody>
@@ -77,7 +72,7 @@
             <script>
                 function del_it(sid) {
                     if (confirm(`確定要刪除編號為 ${sid} 的資料嗎?`)) {
-                        fetch('/products/' + sid, {
+                        fetch('/members/' + sid, {
                             method: 'DELETE'
                         })
                             .then(r => r.json())
