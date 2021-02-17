@@ -17,12 +17,12 @@ router.use((req, res, next)=>{
 // 抓所有資料
 // 算比數
 const listHandler = async (req)=>{
-    const perPage = 10;
+    const perPage = 9;
     const [t_rows] = await db.query("SELECT COUNT(1) num FROM `product_winnie`");
     const totalRows = t_rows[0].num;
     const totalPages = Math.ceil(totalRows/perPage);
 
-    let page = parseInt(req.query.page) || 1;
+    let page = parseInt(req.query.page) || 1;//query：?page=1
 
     let rows = [];
     if(totalRows > 0) {
@@ -30,7 +30,7 @@ const listHandler = async (req)=>{
         if(page>totalPages) page=totalPages;
         // **********改資料表
         // 顯示一頁有幾筆
-        [rows] = await db.query("SELECT * FROM `product_winnie` ORDER BY `sid` DESC LIMIT ?, ?",
+        [rows] = await db.query("SELECT * FROM `product_winnie` ORDER BY `sid` LIMIT ?, ?",
             [(page-1)* perPage, perPage]);
         rows.forEach(item=>{
             item.birthday = moment(item.birthday).format('YYYY-MM-DD');//
@@ -45,11 +45,28 @@ const listHandler = async (req)=>{
     }
 };
 
+//*****商品後端sql******
+
 //我的寶貝sql
 const list = async (req)=>{
    
     let rows = [];
     [rows] = await db.query("SELECT * FROM `product_winnie`");
+    return rows
+};
+//特定id的sql
+const listid = async (req)=>{
+   
+    let rows = [];
+    [rows] = await db.query("SELECT * FROM `product_winnie` WHERE sid=?", [ req.query.sid ]);
+    return rows
+};
+
+//特定分類的sql
+const listcate = async (req)=>{
+   
+    let rows = [];
+    [rows] = await db.query("SELECT * FROM `product_winnie` WHERE category_id=?", [ req.query.category_id ]);
     return rows
 };
 
@@ -127,9 +144,22 @@ router.get('/api/list', async (req, res)=>{
     res.json(output);
 })
 
+//*****商品後端路由******
+
 //我的寶貝
 router.get('/json', async (req, res)=>{
     const output = await list(req);
+    res.status(200).json(output);
+})
+//抓id
+router.get('/id', async (req, res)=>{
+    const output = await listid(req);
+    res.status(200).json(output);
+})
+
+//抓分類
+router.get('/cate', async (req, res)=>{
+    const output = await listcate(req);
     res.status(200).json(output);
 })
 
