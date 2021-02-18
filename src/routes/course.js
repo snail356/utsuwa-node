@@ -37,8 +37,10 @@ const listHandler = async (req) => {
       "SELECT * FROM `course_snail` ORDER BY `sid` DESC LIMIT ?, ?",
       [(page - 1) * perPage, perPage]
     );
+
+    //時間格式
     rows.forEach((item) => {
-      item.birthday = moment(item.birthday).format("YYYY-MM-DD");
+      item.time = moment(item.time).format("YYYY-MM-DD HH:mm");
     });
   }
   return {
@@ -50,10 +52,19 @@ const listHandler = async (req) => {
   };
 };
 
-//?????????????????????????????????????????????????
+//純json格式
 const list = async (req) => {
   let rows = [];
   [rows] = await db.query("SELECT * FROM `course_snail`");
+  return rows;
+};
+
+//純json category_id = 11
+const list1 = async (req) => {
+  let rows = [];
+  [rows] = await db.query(
+    "SELECT `time` FROM `course_snail` WHERE `category_id`=11"
+  );
   return rows;
 };
 
@@ -157,6 +168,11 @@ router.get("/api/list", async (req, res) => {
 //抓上面list的rows
 router.get("/json", async (req, res) => {
   const output = await list(req);
+  res.status(200).json(output);
+});
+//抓上面list1的rows
+router.get("/json1", async (req, res) => {
+  const output = await list1(req);
   res.status(200).json(output);
 });
 
