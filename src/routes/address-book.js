@@ -28,7 +28,7 @@ const listHandler = async (req)=>{
         [rows] = await db.query("SELECT * FROM `address_book` ORDER BY `sid` DESC LIMIT ?, ?",
             [(page-1)* perPage, perPage]);
         rows.forEach(item=>{
-            item.birthday = moment(item.birthday).format('YYYY-MM-DD');
+            item.bid_created_time = moment(item.bid_created_time).format('YYYY-MM-DD HH:mm');
         });
     }
     return {
@@ -42,17 +42,29 @@ const listHandler = async (req)=>{
 
 
 //我的寶貝sql
+// card路由
 const list = async (req)=>{
-   
     let rows = [];
-    [rows] = await db.query("SELECT * FROM `bidding_chang`");
+    [rows] = await db.query("select photo,bid_product_number,bid_sum_money from product_chang t1 inner join bidding_chang t2 on t2.product_id=t1.product_id");
     return rows
 };
 
+// 競標列表路由
 const list2 = async (req)=>{
    
     let rows = [];
-    [rows] = await db.query("select avatar,account,bid_product_number,bid_add_money,bid_sum_money from members t1 inner join bidding_chang t2 on t2.sid=t1.sid");
+    [rows] = await db.query("select avatar,account,bid_product_number,bid_created_time,bid_add_money,bid_sum_money from members t1 inner join product_chang t2 on t2.sid=t1.sid inner join bidding_chang t3 on t3.sid=t1.sid ORDER BY bid_created_time DESC");
+    
+    // localStorage.getItem(product_id)
+    return rows
+};
+
+// 競標id路由
+const list3 = async (req)=>{
+   
+    //  SET ? WHERE sid=?", [data, req.params.sid]
+    let rows = [];
+    [rows] = await db.query("select * from members t1 inner join product_chang t2 on t2.sid=t1.sid inner join bidding_chang t3 on t3.sid=t1.sid ORDER BY bid_created_time DESC");
     return rows
 };
 
@@ -87,19 +99,26 @@ router.delete('/:sid', async (req, res)=>{
 router.get('/add', async (req, res)=>{
     res.render('address-book/add');
 })
+
+// react新增
+// avatar,account,bid_product_number,bid_created_time,bid_add_money,bid_sum_money
 router.post('/add', upload.none(), async (req, res)=>{
     // const data = {...req.body};
-    const {name, email, mobile, birthday, address} = req.body;
-    const data = {name, email, mobile, birthday, address};
-        data.created_at =  new Date();
+    const {sid, product_id, bid_created_time, bid_add_money, bid_sum_money} = req.body;
+    const data = {sid, product_id, bid_created_time, bid_add_money, bid_sum_money};
+        data.bid_created_time =  new Date();
+        data.bid_sum_money= parseInt(data.bid_add_money) + 99999;
+        // data.bid_product_number = JSON.parse(localStorage.getItem('product_id')) || []
+        
     // data.stars =  10;
-    const [result] = await db.query("INSERT INTO `address_book` SET ?", [data]);
+    const [result] = await db.query("INSERT INTO `bidding_chang` SET ?", [data]);
     console.log(result);
 
     if(result.affectedRows===1){
         res.json({
             success: true,
             body: req.body,
+            // sid: req.session.product_chang.product_id
         });
     } else {
         res.json({
@@ -127,6 +146,11 @@ router.get('/json', async (req, res)=>{
 
 router.get('/json2', async (req, res)=>{
     const output = await list2(req);
+    res.status(200).json(output);
+})
+
+router.get('/json3', async (req, res)=>{
+    const output = await list3(req);
     res.status(200).json(output);
 })
 

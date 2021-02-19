@@ -91,6 +91,7 @@ app.post('/try-upload', upload.single('avatar'), (req, res)=>{
         body: req.body,
     })
 })
+
 app.post('/try-upload2', upload.array('photo'), (req, res)=>{
     res.json(req.files)
 })
@@ -191,6 +192,7 @@ if(rows.length===1){
 app.get('/login', async (req, res)=>{
     res.render('login');
 })
+
 app.post('/login', upload.none(), async (req, res)=>{
     const [rows] = await db.query("SELECT * FROM members WHERE account=? AND password=?",
         [req.body.account, req.body.password]);
