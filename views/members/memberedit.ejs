@@ -16,9 +16,13 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">修改會員資料</h5>
-
+                            <img src="http://localhost:3000/imgs/<%= avatar %> " alt=""
+                                style="width:150px;height:150px;object-fit:cover;display:block;margin:auto"
+                                onclick="avatar.click()" id="preview">
                             <!-- 改欄位 -->
                             <form name="form1" novalidate onsubmit="checkForm(); return false;">
+                                <input type="file" id="avatar" name="avatar" accept="image/*" onchange="fileChange()"
+                                    style="display: none">
                                 <div class="form-group">
                                     <label for="account">account</label>
                                     <input type="text" class="form-control" id="account" name="account"
@@ -47,11 +51,11 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="birthday">birthday</label>
-                                    <input type="date" class="form-control" id="birthday" name="birthday"
-                                        value="<%= birthday %>">
+                                    <label for="birth">birthday</label>
+                                    <input type="date" class="form-control" id="birth" name="birth"
+                                        value="<%= birth %>">
                                 </div>
-                                
+
                                 <button type="submit" class="btn btn-primary">修改會員資料</button>
                             </form>
                         </div>
@@ -110,6 +114,20 @@
                                 info.style.display = 'block';
                             });
                     }
+                }
+                const avatar = document.querySelector('#avatar');
+                const preview = document.querySelector('#preview');
+                const reader = new FileReader();
+
+                reader.addEventListener('load', function (event) {
+                    preview.src = reader.result;
+                });
+
+                function fileChange() {
+                    reader.readAsDataURL(avatar.files[0]);
+
+                    //console.log(avatar.files.length);
+                    console.log(avatar.files[0]);
                 }
 
             </script>
