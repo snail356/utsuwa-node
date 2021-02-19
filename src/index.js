@@ -91,6 +91,7 @@ app.post('/try-upload', upload.single('avatar'), (req, res)=>{
         body: req.body,
     })
 })
+
 app.post('/try-upload2', upload.array('photo'), (req, res)=>{
     res.json(req.files)
 })
@@ -163,6 +164,7 @@ app.use('/orderdetails', require(__dirname + '/routes/orderdetails'))
 app.get('/login', async (req, res)=>{
     res.render('login');
 })
+
 app.post('/login', upload.none(), async (req, res)=>{
     const [rows] = await db.query("SELECT * FROM admins WHERE account=? AND password=SHA1(?)",
         [req.body.account, req.body.password]);
