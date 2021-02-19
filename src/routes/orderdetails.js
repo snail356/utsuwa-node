@@ -19,7 +19,11 @@ router.use((req, res, next)=>{
 const listHandler = async (req)=>{
     const perPage = 10;
     const [t_rows] = await db.query("SELECT COUNT(1) num FROM `order_details`");
+    const [baby_rows] = await db.query("SELECT *FROM `orders` o JOIN `order_details` d ON o.`sid`=d.`orders_sid` JOIN `product_winnie` p ON p.sid=d.product_sid ORDER BY `orders_sid`")
+
+
     const totalRows = t_rows[0].num;
+    
     const totalPages = Math.ceil(totalRows/perPage);
 
     let page = parseInt(req.query.page) || 1;
@@ -30,11 +34,13 @@ const listHandler = async (req)=>{
         if(page>totalPages) page=totalPages;
         // **********改資料表
         // 顯示一頁有幾筆
-        [rows] = await db.query("SELECT * FROM `order_details` ORDER BY `sid` DESC LIMIT ?, ?",
+        // [rows] = await db.query("SELECT * FROM `order_details` ORDER BY `sid` DESC LIMIT ?, ?",
+        //     [(page-1)* perPage, perPage]);
+        [rows] = await db.query("SELECT d.*, p.product_name FROM `order_details` d JOIN `product_winnie` p ON p.sid=d.product_sid ORDER BY d.`sid`",
             [(page-1)* perPage, perPage]);
-        rows.forEach(item=>{
-            item.birthday = moment(item.birthday).format('YYYY-MM-DD');
-        });
+        // rows.forEach(item=>{
+        //     item.birthday = moment(item.birthday).format('YYYY-MM-DD');
+        // });
     }
     return {
         perPage,
@@ -42,9 +48,19 @@ const listHandler = async (req)=>{
         totalPages,
         page,
         rows,
+        // baby_rows
     }
 };
-
+// 新增資料
+const dataproduct = async(req,res)=>{
+    const {orders_sid, product_sid, price,amount} = req.body;
+    const data = {orders_sid, product_sid, price,amount};
+        // data.bid_created_time =  new Date();
+    // data.stars =  10;
+    // **********改資料表
+    const [result] = await db.query("INSERT INTO `order_details` SET ?", [data]);
+    console.log(result);
+}
 // **********改資料表
 // 修改
 router.get('/:sid/edit', async (req, res)=>{
@@ -60,8 +76,8 @@ router.get('/:sid/edit', async (req, res)=>{
 
 // 改欄位
 router.post('/:sid/edit', upload.none(), async (req, res)=>{
-    const {order_sid, product_sid, price,quantity} = req.body;
-    const data = {order_sid, product_sid, price,quantity};
+    const {orders_sid, product_sid, price,amount} = req.body;
+    const data = {orders_sid, product_sid, price,amount};
 
     // **********改資料表
     const [result] = await db.query("UPDATE `order_details` SET ? WHERE sid=?", [data, req.params.sid]);
@@ -88,8 +104,8 @@ router.get('/add', async (req, res)=>{
 })
 router.post('/add', upload.none(), async (req, res)=>{
     // const data = {...req.body};
-    const {order_sid, product_sid, price,quantity} = req.body;
-    const data = {order_sid, product_sid, price,quantity};
+    const {orders_sid, product_sid, price,amount} = req.body;
+    const data = {orders_sid, product_sid, price,amount};
         // data.bid_created_time =  new Date();
     // data.stars =  10;
     // **********改資料表
@@ -105,11 +121,16 @@ router.post('/add', upload.none(), async (req, res)=>{
         res.json({
             success: false,
             body: req.body,
-        });
+        })
     }
 })
-router.get('/list', async (req, res)=>{
+router.get('/list', upload.none(),async (req, res)=>{
     const output = await listHandler(req);
+    res.render('orderdetails/orderdetailslist', output);
+})
+
+router.post('/list',upload.none(), async (req, res)=>{
+    const output = await dataproduct(req);
     res.render('orderdetails/orderdetailslist', output);
 })
 

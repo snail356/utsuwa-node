@@ -4,19 +4,19 @@
             <div class="row mt-5">
                 <div class="col">
 
-                    <table class="table table-striped">
+                    <table class="table table-striped text-center">
                         <thead>
                             <tr>
                                 <th scope="col">
-                                    <i class="fas fa-minus-circle"></i>
+                                    <i class="fas fa-minus-circle" hidden></i>
                                 </th>
-                                <th scope="col">#</th>
                                 <th scope="col">訂單編號</th>
-                                <th scope="col">商品編號</th>
+                                <th scope="col">商品品名</th>
+                                <th scope="col">備貨狀態</th>
                                 <th scope="col">價格</th>
                                 <th scope="col">數量</th>
                                 <th scope="col">
-                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-edit" hidden></i>
                                 </th>
                             </tr>
                         </thead>
@@ -25,20 +25,25 @@
                                 <tr>
                                     <td><a href="javascript: del_it(<%= i.sid %>)"><i
                                                 class="fas fa-minus-circle"></i></a></td>
+
                                     <td>
-                                        <%= i.sid %>
+                                        <%= i.orders_sid %>
                                     </td>
                                     <td>
-                                        <%= i.order_sid %>
+                                        <%= i.product_name %>
                                     </td>
                                     <td>
-                                        <%= i.product_sid %>
+                                        <select name="" id="">
+                                            <option value="">準備中</option>
+                                            <option value="">配送中</option>
+                                            <option value="">已出貨</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <%= i.price %>
                                     </td>
                                     <td>
-                                        <%= i.quantity %>
+                                        <%= i.amount %>
                                     </td>
                                     <td><a href="/orderdetails/<%= i.sid%>/edit"><i class="fas fa-edit"></i></a></td>
                                 </tr>

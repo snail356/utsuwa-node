@@ -142,7 +142,7 @@ app.get('/try-moment', (req, res)=>{
 
 
 app.get('/try-db', async (req, res)=>{
-    const [rows] = await db.query("SELECT * FROM `address_book` ORDER BY `sid` DESC LIMIT 6")
+    const [rows] = await db.query("SELECT *FROM `orders` o JOIN `order_details` d ON o.`sid`=d.`orders_sid` JOIN `product_winnie` p ON p.sid=d.product_sid")
     res.json(rows);
 })
 // 老師範例
@@ -158,21 +158,50 @@ app.use('/course', require(__dirname + '/routes/course'))
 app.use('/bidding', require(__dirname + '/routes/bidding'))
 // 訂單路由 椲甯
 app.use('/orderdetails', require(__dirname + '/routes/orderdetails'))
+// app.get('/orders', async (req, res)=>{
+//     const [rows] = await db.query("SELECT `orders`.* , `members`.`account` FROM `orders` JOIN `members` ON `orders`.`member_sid` = `members`.`sid` ORDER BY `sid`")
+//     res.json(rows);
+// })
+// app.post('/orders', async (req, res)=>{
+//     const [rows] = await db.query("INSERT INTO `orders` SET ?")
+//     res.json(rows);
+// })
 
+//管理者
+app.get('/admin-login', async (req, res)=>{
+    res.render('login');
+})
+app.post('/admin-login', upload.none(), async (req, res)=>{
+    const [rows] = await db.query("SELECT * FROM admins WHERE account=? AND password=SHA1(?)",
+    [req.body.account, req.body.password]);
 
+if(rows.length===1){
+    req.session.admin = rows[0];
+    res.json({
+        success: true,
+    })
+} else {
+    res.json({
+        success: false,
+        body: req.body
+    })
+}
+})
 
+//會員
 app.get('/login', async (req, res)=>{
     res.render('login');
 })
 
 app.post('/login', upload.none(), async (req, res)=>{
-    const [rows] = await db.query("SELECT * FROM admins WHERE account=? AND password=SHA1(?)",
+    const [rows] = await db.query("SELECT * FROM members WHERE account=? AND password=?",
         [req.body.account, req.body.password]);
 
     if(rows.length===1){
-        req.session.admin = rows[0];
+        req.session.member = rows[0];
         res.json({
             success: true,
+            sid: req.session.member.sid
         })
     } else {
         res.json({
@@ -228,8 +257,12 @@ app.post('/verify2-jwt', async (req, res)=>{
 
 })
 
-app.get('/logout', (req, res)=>{
+app.get('/member-logout', (req, res)=>{
     delete req.session.admin;
+    res.redirect('/');
+})
+app.get('/logout', (req, res)=>{
+    delete req.session.member;
     res.redirect('/');
 })
 

@@ -1,7 +1,7 @@
 <%- include('../parts/html-head') %>
     <%- include('../parts/navbar') %>
         <div class="container">
-           
+
 
             <div class="row mt-5">
                 <div class="col">
@@ -43,7 +43,7 @@
                                     <td>
                                         <%= i.created_at %>
                                     </td>
-                                    <td><a href="/members/<%= i.sid %>/edit"><i class="fas fa-edit"></i></a></td>
+                                    <td><a href="/members/edit/<%= i.sid %>"><i class="fas fa-edit"></i></a></td>
                                 </tr>
                                 <% } %>
                         </tbody>
