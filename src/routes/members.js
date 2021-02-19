@@ -45,33 +45,40 @@ const listHandler = async (req)=>{
     }
 };
 
-// **********改資料表
-// 修改
-router.get('/:sid/edit', async (req, res)=>{
+//react
+router.get('/edit/:sid', async (req, res)=>{
     const [rows] = await db.query("SELECT * FROM `members` WHERE sid=?", [ req.params.sid ]);
     if(rows.length !== 1){
         return res.redirect( res.locals.baseUrl + '/list' );
     }
 
     //抓資料要轉換時間
-    if(rows[0].birthday){
-        rows[0].birthday = moment(rows[0].birthday).format('YYYY-MM-DD');
+    if(rows[0].birth){
+        rows[0].birth = moment(rows[0].birth).format('YYYY-MM-DD');
     } else {
-        rows[0].birthday = '';
+        rows[0].birth = '';
     }
     
-    res.render('members/memberedit', rows[0]);
+    res.json(rows[0])
+    //res.render('members/memberedit', rows[0]);
+    
 })
 
-// 改欄位
-router.post('/:sid/edit', upload.none(), async (req, res)=>{
-    const {account,email, password, mobile, address, birthday} = req.body;
-    const data = {account,email, password, mobile, address, birthday};
-    if(! birthday.value){
-        delete data.birthday;
-    }
 
+// react
+router.post('/edit/:sid', upload.single('avatar'), async (req, res)=>{
+    const {account, email, password, mobile, address, birth} = req.body;
     
+    const data = {account, email, password, mobile, address, birth};
+    if(req.file && req.file.filename){
+        data.avatar = req.file.filename;
+    }
+    
+    // return res.json(data);
+    if(! req.body.birth){
+        delete data.birth;
+    }
+    //console.log(data);
     // **********改資料表
     const [result] = await db.query("UPDATE `members` SET ? WHERE sid=?", [data, req.params.sid]);
     // affectedRows, changedRows
@@ -97,12 +104,15 @@ router.get('/add', async (req, res)=>{
 })
 router.post('/add', upload.none(), async (req, res)=>{
     // const data = {...req.body};
-    const {account, email, password, mobile, address, birthday, created_at} = req.body;
-    const data = {account, email, password, mobile, address, birthday,created_at};
+    const {account, email, password, created_at} = req.body;
+    const data = {account, email, password, created_at};
         data.created_at =  new Date();
-        if(! birthday.value){
-            delete data.birthday;
-        }
+        // const {account, email, password, mobile, address, birthday, created_at} = req.body;
+        // const data = {account, email, password, mobile, address, birthday,created_at};
+        //     data.created_at =  new Date();
+        //     if(! birthday.value){
+        //         delete data.birthday;
+        //     }
     const [result] = await db.query("INSERT INTO `members` SET ?", [data]);
     console.log(result);
 
