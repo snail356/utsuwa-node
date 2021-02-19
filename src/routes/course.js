@@ -65,9 +65,37 @@ const list1 = async (req) => {
   [rows] = await db.query(
     "SELECT `time` FROM `course_snail` WHERE `category_id`=11"
   );
+  //陣列[rows]整包的資料，抓出單筆資料
+  rows.forEach((row) => {
+    row.time = moment(row.time).format("YYYY-MM-DD HH:mm");
+  });
+
   return rows;
 };
-
+//純json category_id = 12
+const list2 = async (req) => {
+  let rows = [];
+  [rows] = await db.query(
+    "SELECT `time` FROM `course_snail` WHERE `category_id`=12"
+  );
+  //陣列[rows]整包的資料，抓出單筆資料
+  rows.forEach((row) => {
+    row.time = moment(row.time).format("YYYY-MM-DD HH:mm");
+  });
+  return rows;
+};
+//純json category_id = 13
+const list3 = async (req) => {
+  let rows = [];
+  [rows] = await db.query(
+    "SELECT `time` FROM `course_snail` WHERE `category_id`=13"
+  );
+  //陣列[rows]整包的資料，抓出單筆資料
+  rows.forEach((row) => {
+    row.time = moment(row.time).format("YYYY-MM-DD HH:mm");
+  });
+  return rows;
+};
 // **********改資料表
 // 修改
 router.get("/:sid/edit", async (req, res) => {
@@ -79,7 +107,7 @@ router.get("/:sid/edit", async (req, res) => {
   }
 
   // **********改樣板位置
-  rows[0].birthday = moment(rows[0].birthday).format("YYYY-MM-DD");
+  rows[0].time = moment(rows[0].time).format("YYYY-MM-DD");
   res.render("course/courseedit", rows[0]);
 });
 
@@ -175,7 +203,16 @@ router.get("/json1", async (req, res) => {
   const output = await list1(req);
   res.status(200).json(output);
 });
-
+//抓上面list2的rows
+router.get("/json2", async (req, res) => {
+  const output = await list2(req);
+  res.status(200).json(output);
+});
+//抓上面list3的rows
+router.get("/json3", async (req, res) => {
+  const output = await list3(req);
+  res.status(200).json(output);
+});
 // router.get('/', listHandler)
 
 module.exports = router;
