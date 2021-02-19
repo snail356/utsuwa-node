@@ -141,7 +141,7 @@ app.get('/try-moment', (req, res)=>{
 
 
 app.get('/try-db', async (req, res)=>{
-    const [rows] = await db.query("SELECT * FROM `address_book` ORDER BY `sid` DESC LIMIT 6")
+    const [rows] = await db.query("SELECT *FROM `orders` o JOIN `order_details` d ON o.`sid`=d.`orders_sid` JOIN `product_winnie` p ON p.sid=d.product_sid")
     res.json(rows);
 })
 // 老師範例
@@ -157,6 +157,14 @@ app.use('/course', require(__dirname + '/routes/course'))
 app.use('/bidding', require(__dirname + '/routes/bidding'))
 // 訂單路由 椲甯
 app.use('/orderdetails', require(__dirname + '/routes/orderdetails'))
+// app.get('/orders', async (req, res)=>{
+//     const [rows] = await db.query("SELECT `orders`.* , `members`.`account` FROM `orders` JOIN `members` ON `orders`.`member_sid` = `members`.`sid` ORDER BY `sid`")
+//     res.json(rows);
+// })
+// app.post('/orders', async (req, res)=>{
+//     const [rows] = await db.query("INSERT INTO `orders` SET ?")
+//     res.json(rows);
+// })
 
 
 

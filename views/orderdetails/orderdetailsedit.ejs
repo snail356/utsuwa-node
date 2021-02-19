@@ -24,25 +24,25 @@
           <!-- order_sid, product_sid, price,quantity -->
           <form name="form1" novalidate onsubmit="checkForm(); return false;">
             <div class="form-group">
-              <label for="order_sid">訂單編號</label>
+              <label for="orders_sid">訂單編號</label>
               <input
                 type="text"
                 class="form-control"
-                id="order_sid"
-                name="order_sid"
-                value="<%= order_sid %>"
+                id="orders_sid"
+                name="orders_sid"
+                value="<%= orders_sid %>"
               />
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="product_sid">商品編號</label>
               <input
                 type="text"
                 class="form-control"
                 id="product_sid"
                 name="product_sid"
-                value="<%= product_sid %>"
+                value=""
               />
-            </div>
+            </div> -->
 
             <div class="form-group">
               <label for="price">價格</label>
@@ -55,13 +55,13 @@
               />
             </div>
             <div class="form-group">
-              <label for="quantity">數量</label>
+              <label for="amount">數量</label>
               <input
                 type="text"
                 class="form-control"
-                id="quantity"
-                name="quantity"
-                value="<%= quantity %>"
+                id="amount"
+                name="amount"
+                value="<%= amount %>"
               />
             </div>
 
