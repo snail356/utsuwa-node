@@ -13,9 +13,7 @@ router.use((req, res, next)=>{
     next();
 });
 
-// **********改資料表
-// 抓所有資料
-// 算比數
+//node list
 const listHandler = async (req)=>{
     const perPage = 10;
     const [t_rows] = await db.query("SELECT COUNT(1) num FROM `members`");
@@ -48,9 +46,6 @@ const listHandler = async (req)=>{
 //react
 router.get('/edit/:sid', async (req, res)=>{
     const [rows] = await db.query("SELECT * FROM `members` WHERE sid=?", [ req.params.sid ]);
-    if(rows.length !== 1){
-        return res.redirect( res.locals.baseUrl + '/list' );
-    }
 
     //抓資料要轉換時間
     if(rows[0].birth){
@@ -60,6 +55,7 @@ router.get('/edit/:sid', async (req, res)=>{
     }
     
     res.json(rows[0])
+    //node樣板 改這裡！！！！！！
     //res.render('members/memberedit', rows[0]);
     
 })
@@ -74,22 +70,17 @@ router.post('/edit/:sid', upload.single('avatar'), async (req, res)=>{
         data.avatar = req.file.filename;
     }
     
-    // return res.json(data);
     if(! req.body.birth){
         delete data.birth;
     }
-    //console.log(data);
-    // **********改資料表
     const [result] = await db.query("UPDATE `members` SET ? WHERE sid=?", [data, req.params.sid]);
-    // affectedRows, changedRows
     res.json({
-        success: result.changedRows===1
+        success: result.changedRows===1,
+        birth: data.birth
     });
 })
 
 
-// **********改資料表
-// 刪除
 router.delete('/:sid', async (req, res)=>{
     const [result] = await db.query("DELETE FROM `members` WHERE sid=?", [ req.params.sid ]);
     res.json({
@@ -97,26 +88,47 @@ router.delete('/:sid', async (req, res)=>{
     });
 })
 
-// **********改資料表
-// 新增
+//node
 router.get('/add', async (req, res)=>{
     res.render('members/memberadd');
 })
-router.post('/add', upload.none(), async (req, res)=>{
-    // const data = {...req.body};
-    const {account, email, password, created_at} = req.body;
-    const data = {account, email, password, created_at};
-        data.created_at =  new Date();
-        // const {account, email, password, mobile, address, birthday, created_at} = req.body;
-        // const data = {account, email, password, mobile, address, birthday,created_at};
-        //     data.created_at =  new Date();
-        //     if(! birthday.value){
-        //         delete data.birthday;
-        //     }
-    const [result] = await db.query("INSERT INTO `members` SET ?", [data]);
-    console.log(result);
 
-    if(result.affectedRows===1){
+//react
+router.post('/add', upload.none(), async (req, res)=>{
+    //前端
+    const {account, email, password, created_at} = req.body;
+    //後端
+    const data_member = {account, email, password, created_at};
+        data_member.created_at =  new Date();
+    const [result_member] = await db.query("INSERT INTO `members` SET ?", [data_member]);
+    console.log(result_member);
+
+    if(result_member.affectedRows===1){
+        res.json({
+            success: true,
+            body: req.body,
+            sid:result_member.insertId
+        });
+    } else {
+        res.json({
+            success: false,
+            body: req.body,
+        });
+    }
+})
+
+//react 優惠券
+router.post('/coupon', upload.none(), async (req, res)=>{
+    const {name, price, code, member_sid, date} = req.body;
+    const data_cou = {name, price, code, member_sid, date};
+    data_cou.date = new Date();
+    console.log('new date',data_cou.date);
+    data_cou.date.setMonth(data_cou.date.getMonth() + 1);
+    console.log('month+1',data_cou.date);
+    const [result_cou] = await db.query("INSERT INTO `coupon` SET ?", [data_cou]);
+    console.log(result_cou);
+    
+    if(result_cou.affectedRows===1){
         res.json({
             success: true,
             body: req.body,
@@ -128,6 +140,17 @@ router.post('/add', upload.none(), async (req, res)=>{
         });
     }
 })
+
+router.get('/coupon/:sid', async (req, res)=>{
+    const [rows] = await db.query("SELECT * FROM `coupon` WHERE member_sid=?", [ req.params.sid ]);
+    
+    res.json(rows)
+    //node樣板 改這裡！！！！！！
+    //res.render('members/memberedit', rows[0]);
+    
+})
+
+
 router.get('/list', async (req, res)=>{
     const output = await listHandler(req);
     res.render('members/memberlist', output);
