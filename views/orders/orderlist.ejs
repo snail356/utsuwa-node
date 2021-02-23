@@ -1,0 +1,84 @@
+<%- include('../parts/html-head') %>
+    <%- include('../parts/navbar') %>
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col">
+
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">訂單編號</th>
+                                <th scope="col">商品品名</th>
+                                <th scope="col">備貨狀態</th>
+                                <th scope="col">價格</th>
+                                <th scope="col">數量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let i of rows){ %>
+                                <tr>
+                                    <td>
+                                        <%= i.order_id %>
+                                    </td>
+                                    <td>
+                                        <%= i.product_name %>
+                                    </td>
+                                    <td>
+                                        <select name="" id="">
+                                            <option value=""><%=i.shippingStatus%></option>
+                                            <option value="">配送中</option>
+                                            <option value="">已出貨</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <%= i.price %>
+                                    </td>
+                                    <td>
+                                        <%= i.amount %>
+                                    </td>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-3">
+                <div class="col-lg-12">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <% for(let i=page-5; i<page+5; i++) if(i>=1 && i<=totalPages){ %>
+                                    <li class="page-item <%= page===i ? 'active' : '' %>">
+                                        <a class="page-link" href="?page=<%= i %>">
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <% } %>
+                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <%- include('../parts/scripts') %>
+            <script>
+                function del_it(sid) {
+                    if (confirm(`確定要刪除編號為 ${sid} 的資料嗎?`)) {
+                        fetch('/orderdetails/' + sid, {
+                            method: 'DELETE'
+                        })
+                            .then(r => r.json())
+                            .then(r => {
+                                if (r.success) {
+                                    // alert('刪除成功');
+                                    location.reload();
+                                } else {
+                                    alert('失敗');
+                                }
+                            })
+                    }
+                }
+
+
+            </script>
+            <%- include('../parts/html-foot') %>
