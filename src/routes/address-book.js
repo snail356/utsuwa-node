@@ -100,14 +100,22 @@ router.get('/add', async (req, res)=>{
     res.render('address-book/add');
 })
 
-// react新增
 // avatar,account,bid_product_number,bid_created_time,bid_add_money,bid_sum_money
 router.post('/add', upload.none(), async (req, res)=>{
     // const data = {...req.body};
     const {sid, product_id, bid_created_time, bid_add_money, bid_sum_money} = req.body;
     const data = {sid, product_id, bid_created_time, bid_add_money, bid_sum_money};
         data.bid_created_time =  new Date();
-        data.bid_sum_money= parseInt(data.bid_add_money) + 99999;
+
+        if(!data.bid_sum_money){
+            data.bid_sum_money= parseInt(data.bid_add_money) + 0;
+        }else{
+            data.bid_sum_money= parseInt(data.bid_add_money) + parseInt(data.bid_sum_money);
+        }
+        
+        
+        // data.bid_sum_money+= list
+  
         // data.bid_product_number = JSON.parse(localStorage.getItem('product_id')) || []
         
     // data.stars =  10;

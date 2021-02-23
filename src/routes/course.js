@@ -63,7 +63,7 @@ const list = async (req) => {
 const list1 = async (req) => {
   let rows = [];
   [rows] = await db.query(
-    "SELECT `time` FROM `course_snail` WHERE `category_id`=11"
+    "SELECT * FROM `course_snail` WHERE `category_id`=11"
   );
   //陣列[rows]整包的資料，抓出單筆資料
   rows.forEach((row) => {
@@ -72,11 +72,12 @@ const list1 = async (req) => {
 
   return rows;
 };
+
 //純json category_id = 12
 const list2 = async (req) => {
   let rows = [];
   [rows] = await db.query(
-    "SELECT `time` FROM `course_snail` WHERE `category_id`=12"
+    "SELECT * FROM `course_snail` WHERE `category_id`=12"
   );
   //陣列[rows]整包的資料，抓出單筆資料
   rows.forEach((row) => {
@@ -84,11 +85,12 @@ const list2 = async (req) => {
   });
   return rows;
 };
+
 //純json category_id = 13
 const list3 = async (req) => {
   let rows = [];
   [rows] = await db.query(
-    "SELECT `time` FROM `course_snail` WHERE `category_id`=13"
+    "SELECT * FROM `course_snail` WHERE `category_id`=13"
   );
   //陣列[rows]整包的資料，抓出單筆資料
   rows.forEach((row) => {
@@ -96,6 +98,16 @@ const list3 = async (req) => {
   });
   return rows;
 };
+
+//線上課程json
+const list4 = async (req) => {
+  let rows = [];
+  [rows] = await db.query(
+    "SELECT * FROM `course_snail` WHERE `category_id`=14"
+  );
+  return rows;
+};
+
 // **********改資料表
 // 修改
 router.get("/:sid/edit", async (req, res) => {
@@ -198,21 +210,31 @@ router.get("/json", async (req, res) => {
   const output = await list(req);
   res.status(200).json(output);
 });
+
 //抓上面list1的rows
 router.get("/json1", async (req, res) => {
   const output = await list1(req);
   res.status(200).json(output);
 });
+
 //抓上面list2的rows
 router.get("/json2", async (req, res) => {
   const output = await list2(req);
   res.status(200).json(output);
 });
+
 //抓上面list3的rows
 router.get("/json3", async (req, res) => {
   const output = await list3(req);
   res.status(200).json(output);
 });
+
+//抓上面list4的rows
+router.get("/json4", async (req, res) => {
+  const output = await list4(req);
+  res.json(output);
+});
+
 // router.get('/', listHandler)
 
 module.exports = router;
