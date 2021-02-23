@@ -158,14 +158,8 @@ app.use('/course', require(__dirname + '/routes/course'))
 app.use('/bidding', require(__dirname + '/routes/bidding'))
 // 訂單路由 椲甯
 app.use('/orderdetails', require(__dirname + '/routes/orderdetails'))
-// app.get('/orders', async (req, res)=>{
-//     const [rows] = await db.query("SELECT `orders`.* , `members`.`account` FROM `orders` JOIN `members` ON `orders`.`member_sid` = `members`.`sid` ORDER BY `sid`")
-//     res.json(rows);
-// })
-// app.post('/orders', async (req, res)=>{
-//     const [rows] = await db.query("INSERT INTO `orders` SET ?")
-//     res.json(rows);
-// })
+app.use('/orders', require(__dirname + '/routes/orders'))
+
 
 //管理者
 app.get('/admin-login', async (req, res)=>{
