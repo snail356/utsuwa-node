@@ -23,6 +23,8 @@ const listHandler = async (req)=>{
     const totalPages = Math.ceil(totalRows/perPage);
 
     let page = parseInt(req.query.page) || 1;
+    const [test] = await db.query("SELECT sum(`bid_add_money`) FROM `bidding_chang`");
+
 
     let rows = [];
     if(totalRows > 0) {
@@ -33,6 +35,8 @@ const listHandler = async (req)=>{
         [rows] = await db.query("SELECT * FROM `bidding_chang` ORDER BY `bid_id` DESC LIMIT ?, ?",
             [(page-1)* perPage, perPage]);
         rows.forEach(item=>{
+            item.bid_add_money = test[0]
+            item.bid_sum_money += item.bid_add_money
             item.birthday = moment(item.birthday).format('YYYY-MM-DD');
         });
     }
