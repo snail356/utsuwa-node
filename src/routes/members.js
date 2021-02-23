@@ -63,9 +63,9 @@ router.get('/edit/:sid', async (req, res)=>{
 
 // react
 router.post('/edit/:sid', upload.single('avatar'), async (req, res)=>{
-    const {account, email, password, mobile, address, birth} = req.body;
+    const {name, email, password, mobile, address, birth} = req.body;
     
-    const data = {account, email, password, mobile, address, birth};
+    const data = {name, email, password, mobile, address, birth};
     if(req.file && req.file.filename){
         data.avatar = req.file.filename;
     }
