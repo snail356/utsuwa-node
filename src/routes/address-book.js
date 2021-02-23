@@ -45,7 +45,7 @@ const listHandler = async (req)=>{
 // card路由
 const list = async (req)=>{
     let rows = [];
-    [rows] = await db.query("select photo,bid_product_number,bid_sum_money from product_chang t1 inner join bidding_chang t2 on t2.product_id=t1.product_id");
+    [rows] = await db.query("select photo,bid_product_number,bid_sum_money from product_chang t1 inner join bidding_chang t2 on t1.product_id=t2.product_id");
     return rows
 };
 
@@ -107,12 +107,8 @@ router.post('/add', upload.none(), async (req, res)=>{
     const data = {sid, product_id, bid_created_time, bid_add_money, bid_sum_money};
         data.bid_created_time =  new Date();
 
-        if(!data.bid_sum_money){
-            data.bid_sum_money= parseInt(data.bid_add_money) + 0;
-        }else{
-            data.bid_sum_money= parseInt(data.bid_add_money) + parseInt(data.bid_sum_money);
-        }
-        
+        console.log('data.bid_sum_money', data.bid_sum_money);
+        data.bid_sum_money= parseInt(data.bid_add_money) + parseInt(data.bid_sum_money || 0);
         
         // data.bid_sum_money+= list
   

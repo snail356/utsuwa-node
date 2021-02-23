@@ -19,7 +19,7 @@ router.use((req, res, next)=>{
 const listHandler = async (req)=>{
     const perPage = 10;
     const [t_rows] = await db.query("SELECT COUNT(1) num FROM `order_details`");
-    const [baby_rows] = await db.query("SELECT *FROM `orders` o JOIN `order_details` d ON o.`sid`=d.`orders_sid` JOIN `product_winnie` p ON p.sid=d.product_sid ORDER BY `orders_sid`")
+    // const [baby_rows] = await db.query("SELECT *FROM `orders` o JOIN `order_details` d ON o.`sid`=d.`orders_sid` JOIN `product_winnie` p ON p.product_sid=d.product_sid JOIN `members` t ON t.sid=o.member_sid ORDER BY `orders_sid`")
 
 
     const totalRows = t_rows[0].num;
@@ -104,8 +104,8 @@ router.get('/add', async (req, res)=>{
 })
 router.post('/add', upload.none(), async (req, res)=>{
     // const data = {...req.body};
-    const {orders_sid, product_sid, price,amount} = req.body;
-    const data = {orders_sid, product_sid, price,amount};
+    const {product_sid,price,amount} = req.body;
+    const data = {product_sid,price,amount};
         // data.bid_created_time =  new Date();
     // data.stars =  10;
     // **********改資料表
@@ -124,6 +124,8 @@ router.post('/add', upload.none(), async (req, res)=>{
         })
     }
 })
+
+
 router.get('/list', upload.none(),async (req, res)=>{
     const output = await listHandler(req);
     res.render('orderdetails/orderdetailslist', output);
