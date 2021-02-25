@@ -176,6 +176,8 @@ router.post("/add", upload.none(), async (req, res) => {
   const data = { product_name, category_id, price, photo, introduction, time };
   //抓現在的時間
   data.time = new Date();
+  data.time.format("YYYY-MM-DD HH:mm");
+  
   // data.stars =  10;
   // **********改資料表
   const [result] = await db.query("INSERT INTO `course_snail` SET ?", [data]);
@@ -193,6 +195,69 @@ router.post("/add", upload.none(), async (req, res) => {
     });
   }
 });
+
+//新增留言--------------------------------------------------------------------
+router.get("/add2", async (req, res) => {
+  res.render("course/courseadd");
+});
+router.post("/add1", async (req, res) => {
+  // const data = {...req.body};
+  const {
+    //message_sid,
+    sid, //會員sid
+    category_id,
+    message,
+    star,
+    message_created_time,
+  } = req.body;
+  const data = {
+    //message_sid,
+    sid,
+    category_id,
+    message,
+    star,
+    message_created_time: new Date()
+  };
+  //抓現在的時間
+  message_created_time.time = new Date();
+  // data.stars =  10;
+  // **********改資料表
+  const [result] = await db.query("INSERT INTO `message_snail` SET ?", [data]);
+  console.log(result);
+
+  if (result.affectedRows === 1) {
+    res.json({
+      success: true,
+      body: req.body,
+    });
+  } else {
+    res.json({
+      success: false,
+      body: req.body,
+    });
+  }
+});
+
+//拿到資料list----------------------------------------------------------------------
+const listm = async (req) => {
+  //  SET ? WHERE sid=?", [data, req.params.sid]
+  let rows = [];
+  [rows] = await db.query(
+    "select * from members t1 inner join message_snail t2 on t2.sid=t1.sid inner join category t3 on t3.category_id=t2.category_id ORDER BY message_created_time DESC LIMIT 2"
+  );
+  rows.forEach((row) => {
+    row.message_created_time = moment(row.message_created_time).format("YYYY-MM-DD HH:mm");
+  });
+  return rows;
+  
+};
+
+//輸出JSON檔-------------------------------------------------------------------------
+router.get("/jsonm", async (req, res) => {
+  const output = await listm(req);
+  res.status(200).json(output);
+});
+
 //後台列表
 router.get("/list", async (req, res) => {
   const output = await listHandler(req);
