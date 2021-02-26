@@ -3,6 +3,7 @@ const upload = require(__dirname + '/../modules/upload-imgs')
 const moment = require('moment-timezone')
 const router = express.Router();
 const db = require(__dirname + '/../modules/db_connect2');
+const nodemailer = require('nodemailer');
 
 router.use((req, res, next)=>{
     // if(!req.session.admin){
@@ -162,5 +163,53 @@ router.get('/api/list', async (req, res)=>{
 })
 
 // router.get('/', listHandler)
+//這邊改寄送email
+router.post('/email',async(req,res)=>{
+    
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: 'utsuwappottery@gmail.com',
+          pass:'pottery1234',
+        },
+      });
+       transporter.sendMail({
+          from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
+          to:req.body.email, 
+          subject: "utsuwa 窯 - 密碼變更通知",  
+          html:"<h1>如需變更密碼，請使用以下網址來重設您的密碼：<h1/><a href=http://localhost:3008/forgetpass>按這裡重設密碼</a>",
+        }, 
+        function(error, info){
+          if(error){
+              console.log(error);
+          }else{
+              console.log('訊息發送: ' + info.response);
+          }
+      });
+    
+  })
+
+  //這邊變更密碼
+  router.post('/forget',async(req,res)=>{
+    
+    const {email, password}=req.body
+    const data = {email, password}
+    const [rows] = await db.query( "UPDATE `members` SET `password`=? WHERE email = ?",[data.password, data.email])
+    if(rows.changedRows===1){
+     res.json({
+         body: req.body,
+         update: true,
+     })
+
+    }else{
+     res.json({
+         body: req.body,
+         update: "電子郵件錯誤或未註冊",
+     })
+    }
+    
+  })
 
 module.exports = router;

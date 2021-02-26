@@ -46,25 +46,53 @@ router.get('/orderlist', async (req, res)=>{
 // react -> node
 // fetch post 訂單資訊
 router.post('/add', upload.none(), async (req, res)=>{
-    // const data = {...req.body};
-    const {sid,product_name,price,amount,color,size,introduction,customize,discount,totals,selectpay,selecttransform,orderDay,orderName,orderTel,orderEmail,orderRecipient,orderRecipientAddress,orderRecipientTel,ordercreditcard,ordercreditcardcheck,ordercreditcardmonth,ordercreditcardname,ordercreditcardyear,orderinvoice,orderinvoicearea,orderinvoicetype,orderarrivaladdress,orderarrivaldate,orderarrivaltime,shippingStatus,member_sid} = req.body;
-    const data = {sid,product_name,price,amount,color,size,introduction,customize,discount,totals,selectpay,selecttransform,orderDay,orderName,orderTel,orderEmail,orderRecipient,orderRecipientAddress,orderRecipientTel,ordercreditcard,ordercreditcardcheck,ordercreditcardmonth,ordercreditcardname,ordercreditcardyear,orderinvoice,orderinvoicearea,orderinvoicetype,orderarrivaladdress,orderarrivaldate,orderarrivaltime,shippingStatus,member_sid};
-        
-    const [result] = await db.query("INSERT INTO `ning_order` SET ?", [data]);
-    console.log(result);
 
-    if(result.affectedRows===1){
-        res.json({
-            success: true,
-            body: req.body,
-            // sid: req.session.product_chang.product_id
-        });
-    } else {
-        res.json({
-            success: false,
-            body: req.body,
-        });
+
+const ordercart = req.body.ordercart;
+
+ordercart.map(async(item,index)=>{
+    const data={
+        sid:item.sid,
+        product_name:item.product_name,
+        price:item.price,
+        amount:item.amount,
+        color:item.color,
+        size:item.size,
+        introduction:item.introduction,
+        customize:item.customize,
+        // CheckoutP1
+        discount:req.body.discount,
+        totals:req.body.totals,
+        selectpay:req.body.selectpay,
+        selecttransform:req.body.selecttransform,
+        // CheckoutP2
+        orderDay:req.body.orderDay,
+        orderName:req.body.orderName,
+        orderTel:req.body.orderTel,
+        orderEmail:req.body.orderEmail,
+        orderRecipient:req.body.orderRecipient,
+        orderRecipientAddress:req.body.orderRecipientAddress,
+        orderRecipientTel:req.body.orderRecipientTel,
+        ordercreditcard:req.body.ordercreditcard,
+        ordercreditcardcheck:req.body.ordercreditcardcheck,
+        ordercreditcardmonth:req.body.ordercreditcardmonth,
+        ordercreditcardname:req.body.ordercreditcardname,
+        ordercreditcardyear:req.body.ordercreditcardyear,
+        orderinvoice:req.body.orderinvoice,
+        orderinvoicearea:req.body.orderinvoicearea,
+        orderinvoicetype:req.body.orderinvoicetype,
+        orderarrivaladdress:req.body.orderarrivaladdress,
+        orderarrivaldate:req.body.orderarrivaldate,
+        orderarrivaltime:req.body.orderarrivaltime,
+        shippingStatus:req.body.shippingStatus,
+        ordernum:req.body.ordernum,
+        member_sid:req.body.member_sid,
+       
     }
+    const [result] = await db.query("INSERT INTO `ning_order` SET ?", [data]);
+    
+})
+res.json({msg:'ok'})
 })
 
 router.get('/orderlist/:sid', upload.none(), async (req, res)=>{

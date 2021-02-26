@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2021-02-19 11:16:00
+-- 產生時間： 2021-02-25 13:05:26
 -- 伺服器版本： 10.4.17-MariaDB
 -- PHP 版本： 7.3.25
 
@@ -80,9 +80,9 @@ INSERT INTO `admins` (`sid`, `account`, `password`, `created_at`, `avatar`, `nic
 CREATE TABLE `bidding_chang` (
   `bid_id` int(11) NOT NULL,
   `sid` varchar(255) NOT NULL,
-  `bid_product_number` varchar(255) NOT NULL,
+  `product_id` int(11) NOT NULL,
   `bid_add_money` int(11) NOT NULL,
-  `bid_sum_money` int(11) NOT NULL,
+  `bid_sum_money` int(11) DEFAULT NULL,
   `bid_created_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -90,24 +90,45 @@ CREATE TABLE `bidding_chang` (
 -- 傾印資料表的資料 `bidding_chang`
 --
 
-INSERT INTO `bidding_chang` (`bid_id`, `sid`, `bid_product_number`, `bid_add_money`, `bid_sum_money`, `bid_created_time`) VALUES
-(0, '1gk12345', 'a001', 88888, 2000, '2021-02-26 00:00:00'),
-(2, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(3, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(4, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(5, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(6, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(7, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(8, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(9, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(10, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(11, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(12, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(13, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(14, '1', 'a001', 1000, 2000, '2021-02-16 06:40:05'),
-(15, '1', 'a00112345', 1000, 2000, '2021-02-07 00:00:00'),
-(16, '1', 'a001123', 1000, 2000, '2021-02-23 00:00:00'),
-(18, '123456', 'a001', 100, 2000, '2021-02-07 11:22:30');
+INSERT INTO `bidding_chang` (`bid_id`, `sid`, `product_id`, `bid_add_money`, `bid_sum_money`, `bid_created_time`) VALUES
+(1, '1', 1, 100, 100, '2021-02-25 11:30:54'),
+(2, '2', 2, 100, 200, '2021-02-25 11:32:06'),
+(3, '2', 3, 200, 400, '2021-02-25 11:33:54'),
+(4, '1', 4, 100, 100, '2021-02-25 11:30:54'),
+(5, '1', 5, 100, 200, '2021-02-25 11:32:06'),
+(6, '2', 6, 200, 400, '2021-02-25 11:33:54'),
+(7, '1', 7, 100, 100, '2021-02-25 11:30:54'),
+(8, '1', 8, 100, 200, '2021-02-25 11:32:06'),
+(9, '2', 9, 200, 400, '2021-02-25 11:33:54'),
+(10, '2', 10, 100, 500, '2021-02-25 18:18:16'),
+(11, '2', 11, 6666, 7166, '2021-02-25 18:25:35'),
+(19, '2', 1, 200, 7366, '2021-02-25 19:38:05');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `calendar_snail`
+--
+
+CREATE TABLE `calendar_snail` (
+  `sid` int(11) NOT NULL,
+  `product_name` varchar(255) DEFAULT NULL,
+  `category_id` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `photo` varchar(255) DEFAULT NULL,
+  `introduction` varchar(255) DEFAULT NULL,
+  `time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `calendar_snail`
+--
+
+INSERT INTO `calendar_snail` (`sid`, `product_name`, `category_id`, `price`, `photo`, `introduction`, `time`) VALUES
+(1, '捏陶課程', 0, 0, NULL, NULL, '0000-00-00 00:00:00'),
+(2, '拉胚課程', 0, 0, NULL, NULL, '0000-00-00 00:00:00'),
+(3, '押花課程', 0, 0, NULL, NULL, '0000-00-00 00:00:00'),
+(4, '捏陶課程', 0, 0, NULL, NULL, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -165,18 +186,19 @@ CREATE TABLE `course_snail` (
 --
 
 INSERT INTO `course_snail` (`sid`, `product_name`, `category_id`, `price`, `photo`, `introduction`, `time`) VALUES
-(1, '拉胚', 7, 5800, 'on-course-1.jpg', '', '2021-03-21 00:00:00'),
-(2, '捏陶', 8, 5800, 'on-course-1.jpg', '', '2021-03-22 00:00:00'),
-(3, '拉胚', 9, 6000, 'on-course-1.jpg', '', '2021-03-23 00:00:00'),
-(4, '捏陶', 10, 6000, 'on-course-1.jpg', '', '2021-03-24 00:00:00'),
-(5, '療癒系手捏陶', 11, 1200, 'on-course-1.jpg', '', '2021-03-25 13:30:00'),
-(6, '彩繪陶瓷容器 ', 12, 1000, 'on-course-1.jpg', '', '2021-03-26 00:00:00'),
-(7, '壓紋拓印陶盤', 13, 1100, 'on-course-1.jpg', '', '2021-03-31 22:00:00'),
-(8, '捏陶', 14, 4500, 'on-course-1.jpg', '', '0000-00-00 00:00:00'),
-(9, '拉胚', 15, 4800, 'on-course-1.jpg', '', '0000-00-00 00:00:00'),
-(10, '壓紋', 16, 950, 'on-course-1.jpg', '', '0000-00-00 00:00:00'),
-(11, '15651', 2, 4224, '2424', '4242', '2021-02-16 15:47:04'),
-(12, '療癒手捏陶', 11, 2500, NULL, NULL, '2021-02-24 10:00:00');
+(1, '[ 初級 ]拉胚', 7, 5800, '', '從未用雙手觸摸過陶土的人，一定對陶充滿好奇。專業的零元老師，將一步步帶領大家了解陶土，以及製陶原理。', '2021-03-21 00:00:00'),
+(2, '[ 初級 ]捏陶', 8, 5800, '', '從未用雙手觸摸過陶土的人，一定對陶充滿好奇。專業的零元老師，將一步步帶領大家了解陶土，以及製陶原理。', '2021-03-22 00:00:00'),
+(3, '[ 中級 ]拉胚', 9, 6000, '', '從未用雙手觸摸過陶土的人，一定對陶充滿好奇。專業的零元老師，將一步步帶領大家了解陶土，以及製陶原理。', '2021-03-23 00:00:00'),
+(4, '[ 中級 ]捏陶', 10, 6000, '', '從未用雙手觸摸過陶土的人，一定對陶充滿好奇。專業的零元老師，將一步步帶領大家了解陶土，以及製陶原理。', '2021-03-24 00:00:00'),
+(5, '[ 體驗DIY ]療癒系手捏陶', 11, 1200, '', '還記得第一次捏陶土就像玩泥巴一樣的有趣觸感嗎？利用創作力創作出的陶土器皿因為其溫潤的特質而顯得獨一無二，無論是陶杯、陶盤還是陶碗，除了實用性之外，還多了一分溫暖之感。', '2021-03-25 00:00:00'),
+(6, '[ 體驗DIY ]彩繪陶瓷容器 ', 12, 1000, '', '對於陶製品的想像，除了手捏陶土外，還可以彩繪陶製品唷！發揮創作力及想像力，以初步坯形為基底的彩繪陶杯，因為陶土溫潤的特性，在實用性之外，還多了一分溫暖之感。', '2021-03-26 00:00:00'),
+(7, '[ 體驗DIY ]壓紋拓印陶盤', 13, 1100, '', '對於陶製品的想像，除了手捏陶土外，還可以彩繪陶製品唷！發揮創作力及想像力，以初步坯形為基底的彩繪陶杯，因為陶土溫潤的特性，在實用性之外，還多了一分溫暖之感。', '2021-03-27 00:00:00'),
+(8, '[ 線上課程 ]捏陶課程', 14, 4500, 'on-course-3.jpg', '不需在陶藝教室也能享受手做陶的樂趣，創造充滿手捏特色的生活陶器 !', '2021-02-22 22:52:24'),
+(9, '[ 線上課程 ]拉胚課程', 14, 4800, 'on-course-2.jpg', '不需在陶藝教室也能享受手做陶的樂趣，創造充滿手捏特色的生活陶器 !', '0000-00-00 00:00:00'),
+(10, '[ 線上課程 ]壓紋課程', 14, 950, 'on-course-1.jpg', '陶藝的魅力，來自其質樸的氣息，來一段片刻的寧靜體驗，感受土地獨有的豐潤手感。', '0000-00-00 00:00:00'),
+(11, '[ 體驗DIY ]療癒系手捏陶', 11, 1200, NULL, '還記得第一次捏陶土就像玩泥巴一樣的有趣觸感嗎？利用創作力創作出的陶土器皿因為其溫潤的特質而顯得獨一無二，無論是陶杯、陶盤還是陶碗，除了實用性之外，還多了一分溫暖之感。', '2021-02-17 11:08:10'),
+(12, '[ 體驗DIY ]壓紋拓印陶盤', 13, 1100, NULL, '對於陶製品的想像，除了手捏陶土外，還可以彩繪陶製品唷！發揮創作力及想像力，以初步坯形為基底的彩繪陶杯，因為陶土溫潤的特性，在實用性之外，還多了一分溫暖之感。', '2021-02-26 10:54:06'),
+(13, '[ 體驗DIY ]壓紋拓印陶盤', 13, 1100, NULL, '對於陶製品的想像，除了手捏陶土外，還可以彩繪陶製品唷！發揮創作力及想像力，以初步坯形為基底的彩繪陶杯，因為陶土溫潤的特性，在實用性之外，還多了一分溫暖之感。', '2021-02-27 10:58:30');
 
 -- --------------------------------------------------------
 
@@ -187,6 +209,7 @@ INSERT INTO `course_snail` (`sid`, `product_name`, `category_id`, `price`, `phot
 CREATE TABLE `members` (
   `sid` int(11) NOT NULL,
   `avatar` varchar(255) DEFAULT 'profileImg.jpeg',
+  `name` varchar(255) DEFAULT NULL,
   `account` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -200,12 +223,22 @@ CREATE TABLE `members` (
 -- 傾印資料表的資料 `members`
 --
 
-INSERT INTO `members` (`sid`, `avatar`, `account`, `email`, `password`, `mobile`, `address`, `birth`, `created_at`) VALUES
-(1, 'profileImg.jpeg', 'admin', 'aadmin@test.com', 'admin', '', '', NULL, '2021-02-04 17:43:55'),
-(3, 'profileImg.jpeg', 'cindyyy', 'eilleen50830@hotmail.com', '123456', '', '', NULL, '2021-02-08 14:57:59'),
-(4, 'ffabd1ba-f819-47db-9576-28cda72b2f2a.jpg', 'testqq', 'testt@test.com', '123456', '0918', '', '2021-02-17', '2021-02-08 15:27:58'),
-(5, 'profileImg.jpeg', 'eeeeee', 'eeee@test.com', '123456', NULL, NULL, NULL, '2021-02-17 11:43:12'),
-(6, 'profileImg.jpeg', 'chang', 'cc@test.com', '123456', NULL, NULL, NULL, '2021-02-17 16:53:26');
+INSERT INTO `members` (`sid`, `avatar`, `name`, `account`, `email`, `password`, `mobile`, `address`, `birth`, `created_at`) VALUES
+(1, 'profileImg.jpeg', '管理者', 'admin', 'aaaadmin@test.com', 'admin', '', '', '2021-02-10', '2021-02-04 17:43:55'),
+(3, 'profileImg.jpeg', NULL, 'cindyyy', 'eilleen50830@hotmail.com', '123456', '', '', '2021-02-10', '2021-02-08 14:57:59'),
+(4, 'ffabd1ba-f819-47db-9576-28cda72b2f2a.jpg', NULL, 'testqq', 'testt@test.com', '123456', '0918', '', '2021-02-17', '2021-02-08 15:27:58'),
+(5, 'profileImg.jpeg', '嘿嘿', 'eeeeee', 'eeee@test.com', '123456', '', '', '2021-01-08', '2021-02-17 11:43:12'),
+(6, 'profileImg.jpeg', NULL, 'chang', 'cc@test.com', '123456', NULL, NULL, NULL, '2021-02-17 16:53:26'),
+(7, 'profileImg.jpeg', NULL, 'admin5', 'test@test.com', '123456', NULL, NULL, NULL, '2021-02-20 17:07:44'),
+(8, 'profileImg.jpeg', NULL, 'admin6', 'test@gmail.com', '123456', NULL, NULL, NULL, '2021-02-20 17:14:43'),
+(9, 'profileImg.jpeg', NULL, 'admin7', 'test@test.com', '123456', NULL, NULL, NULL, '2021-02-20 17:18:58'),
+(10, 'profileImg.jpeg', NULL, 'admin8', 'test@test.com', '123456', NULL, NULL, NULL, '2021-02-20 17:32:09'),
+(11, 'profileImg.jpeg', NULL, 'admin9', 'test@test.com', '123456', NULL, NULL, NULL, '2021-02-20 17:39:49'),
+(12, 'profileImg.jpeg', NULL, 'admin10', 'test@test.com', '123456', NULL, NULL, NULL, '2021-02-20 18:34:32'),
+(13, 'profileImg.jpeg', NULL, 'admin11', 'tset@test.com', '123456', NULL, NULL, NULL, '2021-02-20 19:30:27'),
+(14, 'profileImg.jpeg', NULL, '123456', 'test@test.com', '123456', NULL, NULL, NULL, '2021-02-20 19:34:56'),
+(15, 'profileImg.jpeg', NULL, '1234567', 'test@test.com', '1234567', NULL, NULL, NULL, '2021-02-20 20:34:50'),
+(16, 'profileImg.jpeg', NULL, '12345678', 'ee@test.com', '12345678', NULL, NULL, NULL, '2021-02-22 17:34:53');
 
 -- --------------------------------------------------------
 
@@ -214,22 +247,41 @@ INSERT INTO `members` (`sid`, `avatar`, `account`, `email`, `password`, `mobile`
 --
 
 CREATE TABLE `message_snail` (
-  `sid` int(11) NOT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `account` varchar(255) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `massege` varchar(255) NOT NULL,
-  `star` int(11) NOT NULL
+  `message_sid` int(11) NOT NULL,
+  `sid` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  `star` int(11) DEFAULT NULL,
+  `message_created_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- 傾印資料表的資料 `message_snail`
 --
 
-INSERT INTO `message_snail` (`sid`, `avatar`, `account`, `category_id`, `massege`, `star`) VALUES
-(1, '', 'A', 1, '好難', 3),
-(2, '', 'A', 6, '有趣', 5),
-(3, '', 'B', 8, '教學詳細', 4);
+INSERT INTO `message_snail` (`message_sid`, `sid`, `category_id`, `message`, `star`, `message_created_time`) VALUES
+(1, 1, 11, '好難', 3, '0000-00-00 00:00:00'),
+(2, 2, 12, '有趣', 5, '0000-00-00 00:00:00'),
+(3, 3, 13, '超讚ˋ作品', 4, '0000-00-00 00:00:00'),
+(4, 1, 1, 'fftx', 0, '0000-00-00 00:00:00'),
+(5, 1, 1, 'fftx', 0, '2021-02-24 00:00:00'),
+(6, NULL, 1, '123121', 0, '2021-02-24 00:00:00'),
+(7, 1, 1, '12132', 0, '2021-02-24 00:00:00'),
+(8, 1, 1, '我是登入留言', 0, '2021-02-24 00:00:00'),
+(9, 1, 1, '', 0, '2021-02-24 00:00:00'),
+(10, 1, 1, '1213', 0, '2021-02-24 00:00:00'),
+(11, 1, 11, '我是留言測試仔~', 0, '2021-02-24 00:00:00'),
+(12, 1, 11, '測試2', 0, '2021-02-24 00:00:00'),
+(13, 1, 11, '55555555555555555555', 0, '2021-02-24 23:59:13'),
+(14, 1, 11, '我可以留言囉:)', 0, '2021-02-25 00:06:53'),
+(15, 1, 11, '在這裡唷', 0, '2021-02-25 00:07:45'),
+(16, 1, 11, '我要留言囉', 0, '2021-02-25 00:09:04'),
+(17, 1, 11, '123', 0, '2021-02-25 09:24:40'),
+(18, NULL, 11, '希望會relaod', 0, '2021-02-25 16:35:47'),
+(19, NULL, 11, '????', 0, '2021-02-25 16:36:18'),
+(20, NULL, 11, '好像送得進留言壓?', 0, '2021-02-25 16:38:18'),
+(21, NULL, 11, '最新一筆', 0, '2021-02-25 16:42:28'),
+(22, 1, 11, '好了 新增一筆', 0, '2021-02-25 16:43:48');
 
 -- --------------------------------------------------------
 
@@ -308,6 +360,37 @@ INSERT INTO `order_details` (`sid`, `order_sid`, `product_sid`, `price`, `quanti
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `product_chang`
+--
+
+CREATE TABLE `product_chang` (
+  `product_id` int(11) NOT NULL,
+  `sid` int(11) NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `bid_product_number` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `product_chang`
+--
+
+INSERT INTO `product_chang` (`product_id`, `sid`, `photo`, `bid_product_number`) VALUES
+(1, 1, '1.jpeg', 'pro001'),
+(2, 2, '2.jpeg', 'pro002'),
+(3, 3, '5.jpeg', 'pro003'),
+(4, 4, '6.jpeg', 'pro004'),
+(5, 5, '7.jpeg', 'pro005'),
+(6, 6, '8.jpeg', 'pro006'),
+(7, 7, '9.jpeg', 'pro007'),
+(8, 8, '10.jpeg', 'pro008'),
+(9, 9, '11.jpeg', 'pro009'),
+(10, 10, '12.jpg', 'pro010'),
+(11, 11, '13.jpg', 'pro011'),
+(12, 12, '2.jpg', 'pro012');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `product_winnie`
 --
 
@@ -330,7 +413,7 @@ INSERT INTO `product_winnie` (`sid`, `product_name`, `category_id`, `price`, `co
 (1, '象牙白咖啡杯', 1, 690, '白', '80mm*100mm', '[\"1.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '以美麗源於美味的品牌理念，顏色，外觀，質地，功能，重視容器的所有元素。'),
 (2, '綠松石杯', 1, 690, '綠', '80mm*100mm', '[\"2.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '以美麗源於美味的品牌理念，顏色，外觀，質地，功能，重視容器的所有元素。'),
 (3, '深灰手作陶瓷杯', 1, 420, '灰', '105mm*105mm', '[\"3.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '希望通過豐富的色彩變化為日常生活著色的日子。'),
-(4, '墨黑淺口杯', 1, 540, '黑', '120mm*68mm', '[\"4.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '擁有此商品可以每天早晨選擇杯子的顏色，就像選擇襯衫的顏色一樣。'),
+(4, '墨黑淺杯', 1, 540, '黑', '120mm*68mm', '[\"4.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '擁有此商品可以每天早晨選擇杯子的顏色，就像選擇襯衫的顏色一樣。'),
 (5, '鵝黃淺口杯', 1, 540, '黃', '120mm*68mm', '[\"5.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '擁有此商品可以每天早晨選擇杯子的顏色，就像選擇襯衫的顏色一樣。'),
 (6, '天空藍淺口杯', 1, 540, '藍', '120mm*68mm', '[\"6.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '擁有此商品可以每天早晨選擇杯子的顏色，就像選擇襯衫的顏色一樣。'),
 (7, '深藍馬克杯', 1, 780, '藍', '105mm*105mm', '[\"7.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '擁有此商品可以每天早晨選擇杯子的顏色，就像選擇襯衫的顏色一樣。'),
@@ -376,11 +459,11 @@ INSERT INTO `product_winnie` (`sid`, `product_name`, `category_id`, `price`, `co
 (47, '小魚筷架', 5, 150, '白', '30mm*40mm', '[\"47.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '小魚筷架靜靜陪您享用美食，就算只是在那裡也使餐桌變得有趣。'),
 (48, '蝴蝶筷架', 5, 260, '黃', '30mm*40mm', '[\"48.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '蝴蝶筷架靜靜陪您享用美食，就算只是在那裡也使餐桌變得有趣。'),
 (49, '鐵瓶筷架', 5, 220, '棕', '45mm*33mm', '[\"49.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '鐵瓶筷架靜靜陪你享用美食，就算只是在那裡也使餐桌變得有趣。'),
-(50, '客製商品', 6, 1080, '黃', '200mm*200mm', '[\"50.png\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
-(51, '客製商品', 6, 1080, '靛', '200mm*200mm', '[\"51.png\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
-(52, '客製商品', 6, 1080, '藍', '200mm*200mm', '[\"52.png\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
-(53, '客製商品', 6, 1080, '綠', '200mm*200mm', '[\"53.png\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
-(54, '客製商品', 6, 1080, '粉', '200mm*200mm', '[\"54.png\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
+(50, '客製商品', 6, 1080, '黃', '200mm*200mm', '[\"50.png\",\"20-2.jpg\",\"20-3.jpg\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
+(51, '客製商品', 6, 1080, '靛', '200mm*200mm', '[\"51.png\",\"20-2.jpg\",\"20-3.jpg\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
+(52, '客製商品', 6, 1080, '藍', '200mm*200mm', '[\"52.png\",\"20-2.jpg\",\"20-3.jpg\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
+(53, '客製商品', 6, 1080, '綠', '200mm*200mm', '[\"53.png\",\"20-2.jpg\",\"20-3.jpg\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
+(54, '客製商品', 6, 1080, '粉', '200mm*200mm', '[\"54.png\",\"20-2.jpg\",\"20-3.jpg\"]', '此商品承載著您特製的心意，非常適合作為禮物。'),
 (57, '深綠飯碗', 3, 590, '綠', '100mm*48mm', '[\"25.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '通過將各種創作者的表情放置在同一形狀的容器上，進一步強調了這些特徵。'),
 (58, '深黑飯碗', 3, 630, '黑', '100mm*48mm', '[\"33.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '通過將各種創作者的表情放置在同一形狀的容器上，進一步強調了這些特徵。'),
 (59, '乳白色壓紋飯碗', 3, 590, '白', '100mm*48mm', '[\"28.jpg\",\"20-2.jpg\",\"20-3.jpg\"]', '通過將各種創作者的表情放置在同一形狀的容器上，進一步強調了這些特徵。');
@@ -396,13 +479,6 @@ CREATE TABLE `sessions` (
   `expires` int(11) UNSIGNED NOT NULL,
   `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- 傾印資料表的資料 `sessions`
---
-
-INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('CP1rYmkeEjxx1cVFSXxhXx9i6JpdXj_0', 1613731321, '{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2021-02-19T10:42:01.498Z\",\"httpOnly\":true,\"path\":\"/\"},\"member\":{\"sid\":1,\"avatar\":\"profileImg.jpeg\",\"account\":\"admin\",\"email\":\"aadmin@test.com\",\"password\":\"admin\",\"mobile\":\"\",\"address\":\"\",\"birth\":null,\"created_at\":\"2021-02-04T09:43:55.000Z\"}}');
 
 --
 -- 已傾印資料表的索引
@@ -421,6 +497,12 @@ ALTER TABLE `bidding_chang`
   ADD PRIMARY KEY (`bid_id`);
 
 --
+-- 資料表索引 `calendar_snail`
+--
+ALTER TABLE `calendar_snail`
+  ADD PRIMARY KEY (`sid`);
+
+--
 -- 資料表索引 `course_snail`
 --
 ALTER TABLE `course_snail`
@@ -433,10 +515,22 @@ ALTER TABLE `members`
   ADD PRIMARY KEY (`sid`);
 
 --
+-- 資料表索引 `message_snail`
+--
+ALTER TABLE `message_snail`
+  ADD PRIMARY KEY (`message_sid`);
+
+--
 -- 資料表索引 `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`sid`);
+
+--
+-- 資料表索引 `product_chang`
+--
+ALTER TABLE `product_chang`
+  ADD PRIMARY KEY (`product_id`);
 
 --
 -- 資料表索引 `product_winnie`
@@ -464,25 +558,43 @@ ALTER TABLE `address_book`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `bidding_chang`
 --
 ALTER TABLE `bidding_chang`
-  MODIFY `bid_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `bid_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `calendar_snail`
+--
+ALTER TABLE `calendar_snail`
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `course_snail`
 --
 ALTER TABLE `course_snail`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `members`
 --
 ALTER TABLE `members`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `message_snail`
+--
+ALTER TABLE `message_snail`
+  MODIFY `message_sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `orders`
 --
 ALTER TABLE `orders`
   MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `product_chang`
+--
+ALTER TABLE `product_chang`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `product_winnie`
