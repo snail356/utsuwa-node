@@ -4,7 +4,8 @@ const moment = require('moment-timezone')
 const router = express.Router();
 const db = require(__dirname + '/../modules/db_connect2');
 const nodemailer = require('nodemailer');
-
+const ejs = require('ejs');
+const  fs = require("fs"); 
 router.use((req, res, next)=>{
     // if(!req.session.admin){
     //     return res.redirect('/');
@@ -164,8 +165,8 @@ router.get('/api/list', async (req, res)=>{
 
 // router.get('/', listHandler)
 //這邊改寄送email
+
 router.post('/email',async(req,res)=>{
-    
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
@@ -174,21 +175,33 @@ router.post('/email',async(req,res)=>{
           user: 'utsuwappottery@gmail.com',
           pass:'pottery1234',
         },
+        tls: {
+            rejectUnauthorized: false
+        }
       });
-       transporter.sendMail({
-          from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
-          to:req.body.email, 
-          subject: "utsuwa 窯 - 密碼變更通知",  
-          html:"<h1>如需變更密碼，請使用以下網址來重設您的密碼：<h1/><a href=http://localhost:3008/forgetpass>按這裡重設密碼</a>",
-        }, 
-        function(error, info){
-          if(error){
-              console.log(error);
-          }else{
-              console.log('訊息發送: ' + info.response);
-          }
+      ejs.renderFile(__dirname +"./../../views/member.ejs", function (err, html) { 
+        if (err) { 
+            console.log(err); 
+        } 
+        else{
+            transporter.sendMail({
+                from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
+                to:req.body.email, 
+                subject: "utsuwa 窯 - 密碼變更通知",  
+              //   html: ejs.render('orders/orderlist'),
+              //   html:"<h1>如需變更密碼，請使用以下網址來重設您的密碼：<h1/><a href=http://localhost:3008/forgetpass>按這裡重設密碼</a>",
+                html: html,
+              }, 
+              function(error, info){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log('訊息發送: ' + info.response);
+                }
+            });
+        }
+
       });
-    
   })
 
   //這邊變更密碼
