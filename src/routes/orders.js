@@ -96,16 +96,21 @@ res.json({msg:'ok'})
 })
 
 router.get('/orderlist/:sid', upload.none(), async (req, res)=>{
-    const [rows] = await db.query("SELECT * FROM `ning_order` WHERE member_sid=?", [ req.params.sid ]);
+    const [rows] = await db.query("SELECT * FROM `ning_order` WHERE member_sid=? group by `ordernum`", [ req.params.sid ]);
+    // const [rows] = await db.query("SELECT * FROM `ning_order` WHERE member_sid=?", [ req.params.sid ]);
     res.json(rows)
 })
 
+router.get('/orderdetail/:sid', upload.none(), async (req, res)=>{
+    const [rows] = await db.query("SELECT * FROM `ning_order` WHERE `ordernum`=?", [ req.params.sid ]);
+    res.json(rows)
+})
 
 // react -> node
 // fetch get 訂單資訊
-router.get('/order', upload.none(), async (req, res)=>{
-    const [rows] = await db.query("SELECT * FROM `ning_order` ORDER BY `order_id` DESC LIMIT 1");
-    res.json(rows)
-})
+// router.get('/order', upload.none(), async (req, res)=>{
+//     const [rows] = await db.query("SELECT * FROM `ning_order` ORDER BY `order_id` DESC LIMIT 1");
+//     res.json(rows)
+// })
 
 module.exports = router;
