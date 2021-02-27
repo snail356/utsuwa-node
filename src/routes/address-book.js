@@ -65,6 +65,9 @@ const list3 = async (req)=>{
     //  SET ? WHERE sid=?", [data, req.params.sid]
     let rows = [];
     [rows] = await db.query("select * from members t1 inner join product_chang t2 on t2.sid=t1.sid inner join bidding_chang t3 on t3.sid=t1.sid ORDER BY bid_created_time DESC");
+    rows.forEach((row) => {
+        row.bid_created_time = moment(row.bid_created_time).format("YYYY-MM-DD HH:mm");
+      });
     return rows
 };
 
