@@ -45,7 +45,7 @@ const listHandler = async (req)=>{
 // card路由
 const list = async (req)=>{
     let rows = [];
-    [rows] = await db.query("select photo,bid_product_number,bid_sum_money from product_chang t1 inner join bidding_chang t2 on t1.product_id=t2.product_id");
+    [rows] = await db.query("select photo,bid_product_number,bid_sum_money,bid_deadline from product_chang t1 inner join bidding_chang t2 on t1.product_id=t2.product_id");
     return rows
 };
 
