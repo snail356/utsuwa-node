@@ -200,7 +200,7 @@ router.post("/add", upload.none(), async (req, res) => {
 router.get("/add2", async (req, res) => {
   res.render("course/courseadd");
 });
-router.post("/add1", async (req, res) => {
+router.post("/add1",upload.single('input欄位名稱'),  async (req, res) => {
   // const data = {...req.body};
   const {
     //message_sid,
@@ -216,10 +216,14 @@ router.post("/add1", async (req, res) => {
     category_id,
     message,
     star,
-    message_created_time: new Date()
+    message_created_time
   };
+  if(req.file && req.file.filename){
+    data.avatar = req.file.filename;
+}
   //抓現在的時間
-  message_created_time.time = new Date();
+  data.message_created_time =  new Date();
+  //message_created_time.time = new Date();
   // data.stars =  10;
   // **********改資料表
   const [result] = await db.query("INSERT INTO `message_snail` SET ?", [data]);
