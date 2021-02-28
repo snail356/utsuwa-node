@@ -165,6 +165,9 @@ router.get('/api/list', async (req, res)=>{
 
 // router.get('/', listHandler)
 //這邊改寄送email
+router.get('/email', async (req, res)=>{
+    res.render('member');
+})
 
 router.post('/email',async(req,res)=>{
     let transporter = nodemailer.createTransport({
@@ -179,7 +182,7 @@ router.post('/email',async(req,res)=>{
             rejectUnauthorized: false
         }
       });
-      ejs.renderFile(__dirname +"./../../views/member.ejs", function (err, html) { 
+      ejs.renderFile(__dirname +"/../../views/member.ejs", function (err, html) { 
         if (err) { 
             console.log(err); 
         } 
@@ -188,8 +191,6 @@ router.post('/email',async(req,res)=>{
                 from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
                 to:req.body.email, 
                 subject: "utsuwa 窯 - 密碼變更通知",  
-              //   html: ejs.render('orders/orderlist'),
-              //   html:"<h1>如需變更密碼，請使用以下網址來重設您的密碼：<h1/><a href=http://localhost:3008/forgetpass>按這裡重設密碼</a>",
                 html: html,
               }, 
               function(error, info){
