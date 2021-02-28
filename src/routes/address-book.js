@@ -3,6 +3,9 @@ const upload = require(__dirname + '/../modules/upload-imgs')
 const moment = require('moment-timezone')
 const router = express.Router();
 const db = require(__dirname + '/../modules/db_connect2');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const  fs = require("fs"); 
 
 router.use((req, res, next)=>{
     // if(!req.session.admin){
@@ -163,5 +166,46 @@ router.get('/json3', async (req, res)=>{
 
 
 // router.get('/', listHandler)
+//這邊改寄送email
 
+//看EMAIL長怎樣
+router.get('/email', async (req, res)=>{
+    res.render('bidding');
+})
+//真正寄送
+router.post('/email',async(req,res)=>{
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: 'utsuwappottery@gmail.com',
+          pass:'pottery1234',
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+      });
+      ejs.renderFile(__dirname +"/../../views/bidding.ejs", function (err, html) { 
+        if (err) { 
+            console.log(err); 
+        } 
+        else{
+            transporter.sendMail({
+                from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
+                to:req.body.email, 
+                subject: "utsuwa 窯 - 密碼變更通知",  
+                html: html,
+              }, 
+              function(error, info){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log('訊息發送: ' + info.response);
+                }
+            });
+        }
+
+      });
+  })
 module.exports = router;
