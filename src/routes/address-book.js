@@ -194,7 +194,7 @@ router.post('/email',async(req,res)=>{
             transporter.sendMail({
                 from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
                 to:req.body.email, 
-                subject: "utsuwa 窯 - 密碼變更通知",  
+                subject: "utsuwa 窯 - 競標得標通知",  
                 html: html,
               }, 
               function(error, info){
