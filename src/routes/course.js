@@ -177,7 +177,7 @@ router.post("/add", upload.none(), async (req, res) => {
   //抓現在的時間
   data.time = new Date();
   data.time.format("YYYY-MM-DD HH:mm");
-  
+
   // data.stars =  10;
   // **********改資料表
   const [result] = await db.query("INSERT INTO `course_snail` SET ?", [data]);
@@ -197,10 +197,11 @@ router.post("/add", upload.none(), async (req, res) => {
 });
 
 //新增留言--------------------------------------------------------------------
-router.get("/add2", async (req, res) => {
-  res.render("course/courseadd");
-});
-router.post("/add1",upload.single('input欄位名稱'),  async (req, res) => {
+// router.get("/add2", async (req, res) => {
+//   res.render("course/courseadd");
+// });
+//upload.single('message_photo')送入檔案
+router.post("/add1", upload.single("message_photo"), async (req, res) => {
   // const data = {...req.body};
   const {
     //message_sid,
@@ -212,17 +213,18 @@ router.post("/add1",upload.single('input欄位名稱'),  async (req, res) => {
   } = req.body;
   const data = {
     //message_sid,
-    sid,
+    sid, //會員sid
     category_id,
     message,
     star,
-    message_created_time
+    message_created_time,
   };
-  if(req.file && req.file.filename){
-    data.avatar = req.file.filename;
-}
+  //若req有檔案則設定message_photo名稱為req內檔案名稱
+  if (req.file && req.file.filename) {
+    data.message_photo = req.file.filename;
+  }
   //抓現在的時間
-  data.message_created_time =  new Date();
+  data.message_created_time = new Date();
   //message_created_time.time = new Date();
   // data.stars =  10;
   // **********改資料表
@@ -250,10 +252,11 @@ const listm = async (req) => {
     "select * from members t1 inner join message_snail t2 on t2.sid=t1.sid inner join category t3 on t3.category_id=t2.category_id ORDER BY message_created_time DESC LIMIT 2"
   );
   rows.forEach((row) => {
-    row.message_created_time = moment(row.message_created_time).format("YYYY-MM-DD HH:mm");
+    row.message_created_time = moment(row.message_created_time).format(
+      "YYYY-MM-DD HH:mm"
+    );
   });
   return rows;
-  
 };
 
 //輸出JSON檔-------------------------------------------------------------------------
