@@ -3,6 +3,9 @@ const upload = require(__dirname + '/../modules/upload-imgs')
 const moment = require('moment-timezone')
 const router = express.Router();
 const db = require(__dirname + '/../modules/db_connect2');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const  fs = require("fs"); 
 
 router.use((req, res, next)=>{
     res.locals.baseUrl = req.baseUrl;
@@ -112,5 +115,45 @@ router.get('/orderdetail/:sid', upload.none(), async (req, res)=>{
 //     const [rows] = await db.query("SELECT * FROM `ning_order` ORDER BY `order_id` DESC LIMIT 1");
 //     res.json(rows)
 // })
+router.get('/email', async (req, res)=>{
+    res.render('order');
+})
+
+router.post('/email',async(req,res)=>{
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: 'utsuwappottery@gmail.com',
+          pass:'pottery1234',
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+      });
+      ejs.renderFile(__dirname +"/../../views/order.ejs", function (err, html) { 
+        if (err) { 
+            console.log(err); 
+        } 
+        else{
+            transporter.sendMail({
+                from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
+                to:req.body.member_email, 
+                subject: "utsuwa 窯 - 訂購完成通知",  
+                html: html,
+              }, 
+              function(error, info){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log('訊息發送: ' + info.response);
+                }
+            });
+        }
+
+      });
+  })
+
 
 module.exports = router;
