@@ -4,6 +4,7 @@ const moment = require('moment-timezone')
 const router = express.Router();
 const db = require(__dirname + '/../modules/db_connect2');
 const nodemailer = require('nodemailer');
+const {v4: uuidv4} = require('uuid');
 const ejs = require('ejs');
 const  fs = require("fs"); 
 router.use((req, res, next)=>{
@@ -169,7 +170,8 @@ router.get('/email', async (req, res)=>{
     res.render('member');
 })
 
-router.post('/email',async(req,res)=>{
+router.post('/email',async (req,res)=>{
+    const uuid = uuidv4();
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
@@ -182,14 +184,28 @@ router.post('/email',async(req,res)=>{
             rejectUnauthorized: false
         }
       });
-      ejs.renderFile(__dirname +"/../../views/member.ejs", function (err, html) { 
+      ejs.renderFile(__dirname +"/../../views/member.ejs", {uuid}, async function (err, html) { 
         if (err) { 
             console.log(err); 
         } 
         else{
-            transporter.sendMail({
+            const {email}=req.body
+            const [rows] = await db.query( "UPDATE `members` SET `uuid`=? WHERE email = ?",[uuid, email])
+            console.log(rows);
+            if(rows.changedRows===1){
+                console.log({
+                    body: req.body,
+                    update: true,
+                })
+            }else {
+                console.log({
+                    success: false,
+                    body: req.body,
+                });
+            }
+            let info = await transporter.sendMail({
                 from: '"utsuwa 窯" <utsuwappottery@gmail.com>', 
-                to:req.body.email, 
+                to:email, 
                 subject: "utsuwa 窯 - 密碼變更通知",  
                 html: html,
               }, 
@@ -199,6 +215,7 @@ router.post('/email',async(req,res)=>{
                 }else{
                     console.log('訊息發送: ' + info.response);
                 }
+                res.send('ok!')
             });
         }
 
@@ -206,11 +223,10 @@ router.post('/email',async(req,res)=>{
   })
 
   //這邊變更密碼
-  router.post('/forget',async(req,res)=>{
+  router.post('/forget/:uuid',async(req,res)=>{
     
-    const {email, password}=req.body
-    const data = {email, password}
-    const [rows] = await db.query( "UPDATE `members` SET `password`=? WHERE email = ?",[data.password, data.email])
+    const {password}=req.body
+    const [rows] = await db.query( "UPDATE `members` SET `password`=? WHERE uuid = ?",[password, req.params.uuid])
     if(rows.changedRows===1){
      res.json({
          body: req.body,
