@@ -203,6 +203,7 @@ router.post('/email',async(req,res)=>{
                 }else{
                     console.log('訊息發送: ' + info.response);
                 }
+                res.send('ok')
             });
         }
 
