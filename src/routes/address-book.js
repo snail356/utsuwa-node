@@ -164,9 +164,15 @@ router.get('/json3', async (req, res)=>{
     res.status(200).json(output);
 })
 
+router.get('/json4', async (req, res)=>{
+    res.status(200).json(`123`);
+})
 
 // router.get('/', listHandler)
 //這邊改寄送email
+
+
+
 
 //看EMAIL長怎樣
 router.get('/email', async (req, res)=>{
@@ -203,7 +209,8 @@ router.post('/email',async(req,res)=>{
                 }else{
                     console.log('訊息發送: ' + info.response);
                 }
-                res.send('ok')
+                //console.log(info.response);
+                res.send('ok ')
             });
         }
 
