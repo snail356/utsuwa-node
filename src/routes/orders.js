@@ -99,7 +99,7 @@ res.json({msg:'ok'})
 })
 
 router.get('/orderlist/:sid', upload.none(), async (req, res)=>{
-    const [rows] = await db.query("SELECT * FROM `ning_order` WHERE member_sid=? group by `ordernum`", [ req.params.sid ]);
+    const [rows] = await db.query("SELECT * FROM `ning_order` WHERE member_sid=? group by `ordernum` ORDER BY `order_id` DESC", [ req.params.sid ]);
     // const [rows] = await db.query("SELECT * FROM `ning_order` WHERE member_sid=?", [ req.params.sid ]);
     res.json(rows)
 })
