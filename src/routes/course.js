@@ -14,9 +14,8 @@ router.use((req, res, next) => {
   next();
 });
 
-// **********改資料表
-// 抓所有資料
-// 算比數
+
+// 抓所有資料並算比數
 const listHandler = async (req) => {
   const perPage = 10;
   const [t_rows] = await db.query("SELECT COUNT(1) num FROM `course_snail`");
@@ -29,7 +28,6 @@ const listHandler = async (req) => {
   if (totalRows > 0) {
     if (page < 1) page = 1;
     if (page > totalPages) page = totalPages;
-    // **********改資料表
     // 顯示一頁有幾筆
     [
       rows,
@@ -108,8 +106,7 @@ const list4 = async (req) => {
   return rows;
 };
 
-// **********改資料表
-// 修改
+// **********修改
 router.get("/:sid/edit", async (req, res) => {
   const [rows] = await db.query("SELECT * FROM `course_snail` WHERE sid=?", [
     req.params.sid,
@@ -118,12 +115,10 @@ router.get("/:sid/edit", async (req, res) => {
     return res.redirect(res.locals.baseUrl + "/list");
   }
 
-  // **********改樣板位置
   rows[0].time = moment(rows[0].time).format("YYYY-MM-DD");
   res.render("course/courseedit", rows[0]);
 });
 
-// 改欄位
 router.post("/:sid/edit", upload.none(), async (req, res) => {
   const {
     product_name,
@@ -135,7 +130,7 @@ router.post("/:sid/edit", upload.none(), async (req, res) => {
   } = req.body;
   const data = { product_name, category_id, price, photo, introduction, time };
 
-  // **********改資料表
+  // **********更新
   const [result] = await db.query("UPDATE `course_snail` SET ? WHERE sid=?", [
     data,
     req.params.sid,
@@ -146,8 +141,8 @@ router.post("/:sid/edit", upload.none(), async (req, res) => {
   });
 });
 
-// **********改資料表
-// 刪除
+
+// **********刪除
 router.delete("/:sid", async (req, res) => {
   const [result] = await db.query("DELETE FROM `course_snail` WHERE sid=?", [
     req.params.sid,
@@ -157,8 +152,8 @@ router.delete("/:sid", async (req, res) => {
   });
 });
 
-// **********改資料表
-// 新增
+
+// **********新增
 router.get("/add", async (req, res) => {
   res.render("course/courseadd");
 });
@@ -178,8 +173,6 @@ router.post("/add", upload.none(), async (req, res) => {
   data.time = new Date();
   data.time.format("YYYY-MM-DD HH:mm");
 
-  // data.stars =  10;
-  // **********改資料表
   const [result] = await db.query("INSERT INTO `course_snail` SET ?", [data]);
   console.log(result);
 
@@ -225,9 +218,7 @@ router.post("/add1", upload.single("message_photo"), async (req, res) => {
   }
   //抓現在的時間
   data.message_created_time = new Date();
-  //message_created_time.time = new Date();
-  // data.stars =  10;
-  // **********改資料表
+  
   const [result] = await db.query("INSERT INTO `message_snail` SET ?", [data]);
   console.log(result);
 
@@ -244,7 +235,7 @@ router.post("/add1", upload.single("message_photo"), async (req, res) => {
   }
 });
 
-//拿到資料list----------------------------------------------------------------------
+//拿到留言資料list----------------------------------------------------------------------
 const listm = async (req) => {
   //  SET ? WHERE sid=?", [data, req.params.sid]
   let rows = [];
@@ -253,7 +244,7 @@ const listm = async (req) => {
   );
   rows.forEach((row) => {
     row.message_created_time = moment(row.message_created_time).format(
-      "YYYY-MM-DD HH:mm"
+      "YYYY-MM-DD"
     );
   });
   return rows;
@@ -271,7 +262,7 @@ router.get("/list", async (req, res) => {
   res.render("course/courselist", output);
 });
 
-//跑出json檔(但有)
+//跑出json檔
 router.get("/api/list", async (req, res) => {
   const output = await listHandler(req);
   res.json(output);
